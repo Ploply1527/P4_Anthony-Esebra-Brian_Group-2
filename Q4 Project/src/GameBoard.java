@@ -1,8 +1,11 @@
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 
 public class GameBoard {
 
-	//PacMan board is 28 x 36
+	//PacMan board is 28 x 31
 	public Tile[][] board = new Tile[28][31];
 	
 	private final int a = 0;
@@ -72,5 +75,25 @@ public class GameBoard {
 				board[i][o] = new Tile(tileSet[i][o]);
 			}
 		}
+	}
+	
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub	
+		switch(arg0.getKeyCode()) {
+			
+			//slide right
+			case 39:
+				break;
+				
+			case 37: //left
+				break;
+			case 38: //up
+				break;
+			case 40: //down
+				break;
+		}
+		
+		//Reset the game on button press when key is pressed and player is dead
+		
 	}
 }
