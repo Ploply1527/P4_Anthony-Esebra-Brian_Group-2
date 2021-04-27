@@ -20,4 +20,10 @@ public class PacMan extends GameObject{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	///This is the actual stuff for the movement
+	public void movement()
+	{
+		
+	}
 }

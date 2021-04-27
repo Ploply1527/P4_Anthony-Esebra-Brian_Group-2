@@ -75,6 +75,8 @@ public class GameBoard {
 				board[i][o] = new Tile(tileSet[i][o]);
 			}
 		}
+		
+		//Set the pacman board image
 	}
 	
 	public void keyPressed(KeyEvent arg0) {
