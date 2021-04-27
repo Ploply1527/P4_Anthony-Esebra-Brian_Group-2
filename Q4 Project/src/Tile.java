@@ -24,10 +24,8 @@ public class Tile {
 			//Set big pellet tile
 			break;
 		case 3:
-			//Set no pellet tile
 			break;
 		case 4:
-			//Set ghost zone tile
 			break;
 		}
 	}

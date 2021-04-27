@@ -1,12 +1,26 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
+import java.net.URL;
 import java.util.Arrays;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class GameBoard {
+public class GameBoard extends JPanel implements KeyListener{
 
 	//PacMan board is 28 x 31
-	public Tile[][] board = new Tile[28][31];
+	public Tile[][] board = new Tile[31][28];
+	//The board for pacMan
+	private Image boardImage;
+
+	private int x = 0,y = 0;
+	private AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
 	
 	private final int a = 0;
 	//The move ability of the board
@@ -46,37 +60,63 @@ public class GameBoard {
 	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//30
 	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a}//31
 	};
+	
+	//Region: GameObjects
+	
+	/*
+	PacMan pacMan = new PacMan(1,1,"Pacman");
+	
+	//Region: Ghosts
+	Ghost blue = new Ghost(1,1,"Blue");
+	Ghost orange = new Ghost(1,1,"Blue");
+	Ghost red = new Ghost(1,1,"Blue");
+	Ghost pink = new Ghost(1,1,"Blue");
+	*/
+	//endRegion
+
 	///This is the base logic for the game board 
+	public void paint(Graphics g)
+	{
+		super.paintComponent(g);// This is for refresh
+		
+		Graphics2D g2 = (Graphics2D)g;
+		g2.drawImage(boardImage, tx, null); 
+	}
+	
+	//This is the constructor for the gameboard
 	public GameBoard()
 	{
 		CreateFrame(); //This creates the game frame
 		SetTiles();    //This sets all of the tiles
-	}
-	
-	void CreateFrame()
-	{
-		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(800,600);
-		frame.add(frame, this);
+		//This is the one that sets the board image
 
-		//this part makes sure the x button closes the program
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		URL imageURL = GameBoard.class.getResource("PacBoard.png");
+		boardImage = Toolkit.getDefaultToolkit().getImage(imageURL);
 
-		//make the frame show up
-		frame.setVisible(true);
+		init(x,y);
 	}
 	
 	void SetTiles()
 	{
 		for(int i = 0; i < tileSet.length; i++)
 		{
-			for(int o = 0; o < tileSet.length; o++)
+			for(int o = 0; o < tileSet[i].length; o++)
 			{
 				board[i][o] = new Tile(tileSet[i][o]);
 			}
 		}
-		
-		//Set the pacman board image
+	}
+	
+	void CreateFrame()
+	{
+		JFrame frame = new JFrame("Pac Man");
+		frame.setSize(800,600);
+		//this part makes sure the x button closes the program
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(this);
+
+		//make the frame show up
+		frame.setVisible(true);
 	}
 	
 	public void keyPressed(KeyEvent arg0) {
@@ -85,8 +125,7 @@ public class GameBoard {
 			
 			//slide right
 			case 39:
-				break;
-				
+				break;	
 			case 37: //left
 				break;
 			case 38: //up
@@ -97,5 +136,33 @@ public class GameBoard {
 		
 		//Reset the game on button press when key is pressed and player is dead
 		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void init(double a, double b) {
+		tx.setToTranslation(a, b);
+		tx.scale(1, 1);
+	}
+	
+	private Image getImage(String path) {
+		Image tempImage = null;
+		try {
+			URL imageURL = GameBoard.class.getResource(path);
+			tempImage = Toolkit.getDefaultToolkit().getImage(imageURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tempImage;
 	}
 }

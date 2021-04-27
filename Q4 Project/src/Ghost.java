@@ -7,8 +7,8 @@ public class Ghost extends GameObject{
 	
 	//endRegion
 	
-	public Ghost(int xPos, int yPos, String imageName) {
-		super(xPos, yPos, imageName);
+	public Ghost(int xGrid, int yGrid, String imageName) {
+		super(xGrid, yGrid, imageName);
 		vulnerable = false;//Makes the ghost not able to be eaten
 	}
 
@@ -27,12 +27,20 @@ public class Ghost extends GameObject{
 	//endRegion
 	
 	//This method should be called when the invincible pellet is used
-	public static void turnVulnerable()
+	public void turnVulnerable()
 	{
+		vulnerable = true;
+		
+		//Timer for invulnerabiliy time
 	}
 	
+	//This is the collision done with the pacMan stuff
+	public void collision(PacMan p)
+	{
+		
+	}
 	//This method should be called when pacman eats the ghost
-	public void returnToStart()
+	private void returnToStart()
 	{
 		
 	}

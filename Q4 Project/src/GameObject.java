@@ -17,10 +17,10 @@ public abstract class GameObject {
 	
 	private Image baseImage;//This is the default image that the game object will use
 	
-	public GameObject(int xPos, int yPos, String imgName)
+	public GameObject(int xGrid, int yGrid, String imgName)
 	{
-		gridX = xPos;
-		gridY = yPos;
+		gridX = xGrid;
+		gridY = yGrid;
 		
 		baseImage = getImage(imgName); //load the base image
 		//posX = (pixelCountX / 28) * gridX;

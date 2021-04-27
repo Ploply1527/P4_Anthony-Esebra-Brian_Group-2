@@ -5,8 +5,8 @@ public class PacMan extends GameObject{
 	//Region: Pacman sprites
 	
 	//endRegion
-	public PacMan(int xPos, int yPos, String imageName) {
-		super(xPos, yPos, imageName);
+	public PacMan(int xGrid, int yGrid, String imageName) {
+		super(xGrid, yGrid, imageName);
 		// TODO Auto-generated constructor stub
 	}
 
