@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
@@ -11,13 +13,14 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class GameBoard extends JPanel implements KeyListener{
+public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
 	//PacMan board is 28 x 31
 	public Tile[][] board = new Tile[31][28];
 	//The board for pacMan
-	private Image boardImage;
+	private Image boardImage = getImage("PacBoard.png");
 
 	private int x = 0,y = 0;
 	private AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
@@ -78,22 +81,23 @@ public class GameBoard extends JPanel implements KeyListener{
 	public void paint(Graphics g)
 	{
 		super.paintComponent(g);// This is for refresh
+		Graphics2D g2 = (Graphics2D) g;
 		
-		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(boardImage, tx, null); 
+		System.out.println("D");
 	}
 	
 	//This is the constructor for the gameboard
 	public GameBoard()
 	{
+		init(x,y);
 		CreateFrame(); //This creates the game frame
+		
 		SetTiles();    //This sets all of the tiles
 		//This is the one that sets the board image
 
-		URL imageURL = GameBoard.class.getResource("PacBoard.png");
-		boardImage = Toolkit.getDefaultToolkit().getImage(imageURL);
-
-		init(x,y);
+		//URL imageURL = GameBoard.class.getResource("PacBoard.png");
+		//boardImage = Toolkit.getDefaultToolkit().getImage(imageURL);
 	}
 	
 	void SetTiles()
@@ -105,15 +109,17 @@ public class GameBoard extends JPanel implements KeyListener{
 				board[i][o] = new Tile(tileSet[i][o]);
 			}
 		}
+		System.out.println("Done!");
 	}
 	
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(800,600);
+		frame.setSize(600,685);
 		//this part makes sure the x button closes the program
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
+		Timer t = new Timer(16,this);
 
 		//make the frame show up
 		frame.setVisible(true);
@@ -152,7 +158,7 @@ public class GameBoard extends JPanel implements KeyListener{
 	
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
-		tx.scale(1, 1);
+		tx.scale(0.5, 0.5);
 	}
 	
 	private Image getImage(String path) {
@@ -164,5 +170,11 @@ public class GameBoard extends JPanel implements KeyListener{
 			e.printStackTrace();
 		}
 		return tempImage;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
