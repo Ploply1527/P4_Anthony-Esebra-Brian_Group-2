@@ -87,12 +87,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.drawImage(boardImage, tx, null); 
-		System.out.println("D");
-		
-		
-		g.setColor(Color.yellow);
-		g.fillOval(x1,40,34,34);
-		x1 += 1;
 	}
 	
 	//This is the constructor for the gameboard
