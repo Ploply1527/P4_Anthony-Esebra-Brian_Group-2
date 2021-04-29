@@ -1,4 +1,6 @@
 import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Tile {
 	
@@ -31,7 +33,10 @@ public class Tile {
 	}
 	
 	//Region: Public voids
-	
+	//This will be used to draw pellets
+	public void paint(Graphics g)
+	{
+	}
 	///This will be used for collision detection
 	public int getTileType()
 	{

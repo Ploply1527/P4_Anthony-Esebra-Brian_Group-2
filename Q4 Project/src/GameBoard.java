@@ -23,6 +23,8 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	private Image boardImage = getImage("PacBoard.png");
 
 	private int x = 0,y = 0;
+	
+	private int x1 = 0;
 	private AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
 	
 	private final int a = 0;
@@ -65,10 +67,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	};
 	
 	//Region: GameObjects
-	
+
+	PacMan pacMan = new PacMan(14,24,"Pacman1.png");
 	/*
-	PacMan pacMan = new PacMan(1,1,"Pacman");
-	
 	//Region: Ghosts
 	Ghost blue = new Ghost(1,1,"Blue");
 	Ghost orange = new Ghost(1,1,"Blue");
@@ -80,11 +81,18 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	///This is the base logic for the game board 
 	public void paint(Graphics g)
 	{
+		//Refresh is not working
 		super.paintComponent(g);// This is for refresh
+		
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.drawImage(boardImage, tx, null); 
 		System.out.println("D");
+		
+		
+		g.setColor(Color.yellow);
+		g.fillOval(x1,40,34,34);
+		x1 += 1;
 	}
 	
 	//This is the constructor for the gameboard
@@ -116,11 +124,17 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{
 		JFrame frame = new JFrame("Pac Man");
 		frame.setSize(600,685);
+		
+		frame.setBackground(Color.black);
+		frame.setResizable(false);
+		frame.add(this);
+		
+		Timer t = new Timer(16,this);
+		t.start();
+		
 		//this part makes sure the x button closes the program
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(this);
-		Timer t = new Timer(16,this);
-
+		
 		//make the frame show up
 		frame.setVisible(true);
 	}
@@ -175,6 +189,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		repaint();
 	}
 }

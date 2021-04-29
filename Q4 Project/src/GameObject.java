@@ -8,14 +8,18 @@ import java.net.URL;
 public abstract class GameObject {
 
 	//Region:Position Variables
-	private int gridX;//This is where on the x-axis on the grid the ghost is on grid
-	private int gridY;//This is where on the y-axis on the grid the ghost is on grid
+	protected int gridX;//This is where on the x-axis on the grid the ghost is on grid
+	protected int gridY;//This is where on the y-axis on the grid the ghost is on grid
 	
-	private int posX;//This is the x pixel position the ghost is on the screen
-	private int posY;//This is the y pixel position the ghost is on the screen
+	protected int posX;//This is the x pixel position the ghost is on the screen
+	protected int posY;//This is the y pixel position the ghost is on the screen
 	//endRegion
 	
-	private Image baseImage;//This is the default image that the game object will use
+	//Region: Animation Variables
+	protected Image baseImage;//This is the default image that the game object will use
+	protected int timerCount = 0; //This is the timer for the animation
+	protected final int changeFrame = 20; //This is how many frames later animation will change
+	//endRegion
 	
 	public GameObject(int xGrid, int yGrid, String imgName)
 	{
@@ -36,9 +40,12 @@ public abstract class GameObject {
 	//Protected means that only classes that inherit from this can access it
 	protected abstract void animation();
 	
-	//Region: Getters and Setters
-	public int getX() {return posX;}
+	//Region:Movement
+	//endRegion
 	
+	//Region: Getters and Setters
+	public int getX() {return gridX;}
+	public int getY() {return gridY;}
 	//End Region
 	
 	//I ripped this straight out of the duck hunt code

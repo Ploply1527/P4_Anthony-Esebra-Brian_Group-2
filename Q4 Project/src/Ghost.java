@@ -12,6 +12,9 @@ public class Ghost extends GameObject{
 		vulnerable = false;//Makes the ghost not able to be eaten
 	}
 
+	//Region: AI
+	//endRegion
+	
 	//Region: Abstract Voids
 	@Override
 	public void paint(Graphics g) {
