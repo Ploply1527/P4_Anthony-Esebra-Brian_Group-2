@@ -5,6 +5,7 @@ public class Ghost extends GameObject{
 	//Region: Variables
 	private boolean vulnerable;//This controls if the ghost can be eaten or not
 	
+	private int speeds[] = {1,2,3,4,5};//This is a possible list of speeds the ghosts can have
 	//endRegion
 	
 	public Ghost(int xGrid, int yGrid, String imageName) {
@@ -27,6 +28,10 @@ public class Ghost extends GameObject{
 		
 	}
 	
+	protected void movement()
+	{
+		
+	}
 	//endRegion
 	
 	//This method should be called when the invincible pellet is used
@@ -45,6 +50,9 @@ public class Ghost extends GameObject{
 	//This method should be called when pacman eats the ghost
 	private void returnToStart()
 	{
-		
+		while(true)
+		{
+			
+		}
 	}
 }

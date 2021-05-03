@@ -18,14 +18,12 @@ import javax.swing.Timer;
 public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
 	//PacMan board is 28 x 31
-	public Tile[][] board = new Tile[31][28];
+	//Scale is x22 larger.
+	public Tile[][] board = new Tile[29][28];
 	//The board for pacMan
 	private Image boardImage = getImage("PacBoard.png");
 
-	private int x = 0,y = 0;
-	
-	private int x1 = 0;
-	private AffineTransform tx = AffineTransform.getTranslateInstance(x, y);
+	private AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
 	
 	private final int a = 0;
 	//The move ability of the board
@@ -46,31 +44,33 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{a,a,a,a,a,a,1,a,a,a,a,a,3,a,a,3,a,a,a,a,a,1,a,a,a,a,a,a},//11
 	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//12
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//13
-	{a,a,a,a,a,a,1,a,a,3,a,3,3,4,4,3,3,a,3,a,a,1,a,a,a,a,a,a},//14
-	{3,3,3,3,3,3,1,3,3,3,a,3,3,4,4,3,3,a,3,3,3,1,3,3,3,3,3,3},//15
-	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//16
+	{3,3,3,3,3,3,1,3,3,3,a,3,3,4,4,3,3,a,3,3,3,1,3,3,3,3,3,3},//14
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//15
+	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//16
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//17
-	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//18
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//19
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//20
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//21
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//22
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//23
-	{a,2,1,1,a,a,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,a,a,1,1,2,a},//24
-	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//25
-	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//26
-	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//27
-	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//28
-	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//29
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//30
-	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a}//31
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//18
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//19
+	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//20
+	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//21
+	{a,2,1,1,a,a,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,a,a,1,1,2,a},//22
+	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//23
+	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//24
+	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//25
+	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//26
+	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//27
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//28
+	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a} //29
 	};
 	
 	//Region: GameObjects
 
-	PacMan pacMan = new PacMan(14,24,"Pacman1.png");
+	//Region: Pac Man
+	PacMan pacMan = new PacMan(14,22,"Pacman1.png");
+	int directionInput = 0;//This is the direction pacman is facing
+	
 	/*
 	//Region: Ghosts
+	Ghost[] ghostList = new Ghost[4];
 	Ghost blue = new Ghost(1,1,"Blue");
 	Ghost orange = new Ghost(1,1,"Blue");
 	Ghost red = new Ghost(1,1,"Blue");
@@ -85,39 +85,26 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		super.paintComponent(g);// This is for refresh
 		
 		Graphics2D g2 = (Graphics2D) g;
-		
 		g2.drawImage(boardImage, tx, null); 
+		
+		pacMan.paint(g);
+		pacMan.movement(directionInput);
 	}
 	
 	//This is the constructor for the gameboard
 	public GameBoard()
 	{
-		init(x,y);
+		init(0,0);
 		CreateFrame(); //This creates the game frame
 		
 		SetTiles();    //This sets all of the tiles
-		//This is the one that sets the board image
-
-		//URL imageURL = GameBoard.class.getResource("PacBoard.png");
-		//boardImage = Toolkit.getDefaultToolkit().getImage(imageURL);
-	}
-	
-	void SetTiles()
-	{
-		for(int i = 0; i < tileSet.length; i++)
-		{
-			for(int o = 0; o < tileSet[i].length; o++)
-			{
-				board[i][o] = new Tile(tileSet[i][o]);
-			}
-		}
-		System.out.println("Done!");
+		SetObjects();  //This sets all of the gameObjects
 	}
 	
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(600,685);
+		frame.setSize(616,682);
 		
 		frame.setBackground(Color.black);
 		frame.setResizable(false);
@@ -133,18 +120,36 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		frame.setVisible(true);
 	}
 	
+	void SetTiles()
+	{
+		for(int i = 0; i < tileSet.length; i++)
+		{
+			for(int o = 0; o < tileSet[i].length; o++)
+			{
+				board[i][o] = new Tile(tileSet[i][o]);
+			}
+		}
+		System.out.println("Done!");
+	}
+	void SetObjects()
+	{
+		
+	}
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub	
 		switch(arg0.getKeyCode()) {
 			
-			//slide right
-			case 39:
-				break;	
-			case 37: //left
-				break;
 			case 38: //up
+				directionInput = 0;
 				break;
 			case 40: //down
+				directionInput = 1;
+				break;
+			case 37://left
+				directionInput = 2;
+				break;	
+			case 39: //right
+				directionInput = 3;
 				break;
 		}
 		
@@ -166,7 +171,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
-		tx.scale(0.5, 0.5);
+		tx.scale(0.514, 0.5);
 	}
 	
 	private Image getImage(String path) {

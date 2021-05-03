@@ -3,6 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.awt.geom.AffineTransform;
 
 ///This should be a class that should be inherited from
 public abstract class GameObject {
@@ -13,6 +14,9 @@ public abstract class GameObject {
 	
 	protected int posX;//This is the x pixel position the ghost is on the screen
 	protected int posY;//This is the y pixel position the ghost is on the screen
+	protected AffineTransform tx = AffineTransform.getTranslateInstance(posX, posY);
+	
+	static int[][] grid;
 	//endRegion
 	
 	//Region: Animation Variables
@@ -27,9 +31,10 @@ public abstract class GameObject {
 		gridY = yGrid;
 		
 		baseImage = getImage(imgName); //load the base image
-		//posX = (pixelCountX / 28) * gridX;
-		//posY = (pixelCountY / 31) * gridY;
+		posX = gridX * 22;
+		posY = gridY * 22;
 		
+		init(posX, posY);//Initialize the position
 	}
 	
 	
@@ -41,11 +46,17 @@ public abstract class GameObject {
 	protected abstract void animation();
 	
 	//Region:Movement
+	protected int checkTile()
+	{
+		return 0;
+	}
 	//endRegion
 	
 	//Region: Getters and Setters
 	public int getX() {return gridX;}
 	public int getY() {return gridY;}
+	
+	public static void setGrid(int[][] g) { grid = g;}
 	//End Region
 	
 	//I ripped this straight out of the duck hunt code
@@ -58,5 +69,11 @@ public abstract class GameObject {
 			e.printStackTrace();
 		}
 		return tempImage;
+	}
+	
+	//This is for initialization
+	private void init(double a, double b) {
+		tx.setToTranslation(a, b);
+		tx.scale(1, 1);
 	}
 }
