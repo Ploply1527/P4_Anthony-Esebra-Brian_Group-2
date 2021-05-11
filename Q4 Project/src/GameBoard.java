@@ -66,7 +66,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
 	//Region: Pac Man
 	PacMan pacMan = new PacMan(14,22,"Pacman1.png");
-	int directionInput = 0;//This is the direction pacman is facing
+	Direction direction = Direction.Right;
 	
 	/*
 	//Region: Ghosts
@@ -87,8 +87,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(boardImage, tx, null); 
 		
+		DrawTiles(g);
 		pacMan.paint(g);
-		pacMan.movement(directionInput);
+		pacMan.movement(direction);
 	}
 	
 	//This is the constructor for the gameboard
@@ -104,7 +105,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(616,682);
+		frame.setSize(616,660);
 		
 		frame.setBackground(Color.black);
 		frame.setResizable(false);
@@ -115,7 +116,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		
 		//this part makes sure the x button closes the program
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		frame.addKeyListener(this);
 		//make the frame show up
 		frame.setVisible(true);
 	}
@@ -126,30 +127,46 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		{
 			for(int o = 0; o < tileSet[i].length; o++)
 			{
-				board[i][o] = new Tile(tileSet[i][o]);
+				board[i][o] = new Tile(tileSet[i][o],o,i);
 			}
 		}
 		System.out.println("Done!");
+	}
+	
+	void DrawTiles(Graphics g)
+	{
+		for(int i = 0; i < tileSet.length; i++)
+		{
+			for(int o = 0; o < tileSet[i].length; o++)
+			{
+				board[i][o].paint(g);
+			}
+		}
 	}
 	void SetObjects()
 	{
 		
 	}
+	
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub	
 		switch(arg0.getKeyCode()) {
 			
 			case 38: //up
-				directionInput = 0;
+				direction = Direction.Up;
+				System.out.println("UP");
 				break;
 			case 40: //down
-				directionInput = 1;
+				direction = Direction.Down;
+				System.out.println("Down");
 				break;
 			case 37://left
-				directionInput = 2;
+				direction = Direction.Left;
+				System.out.println("Left");
 				break;	
 			case 39: //right
-				directionInput = 3;
+				direction = Direction.Right;
+				System.out.println("Right");
 				break;
 		}
 		
@@ -160,7 +177,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -171,7 +187,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
-		tx.scale(0.514, 0.5);
+		tx.scale(0.514, 0.468);
 	}
 	
 	private Image getImage(String path) {

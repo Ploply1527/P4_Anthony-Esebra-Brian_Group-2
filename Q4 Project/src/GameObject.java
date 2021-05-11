@@ -16,7 +16,10 @@ public abstract class GameObject {
 	protected int posY;//This is the y pixel position the ghost is on the screen
 	protected AffineTransform tx = AffineTransform.getTranslateInstance(posX, posY);
 	
-	static int[][] grid;
+	//PacMan board is 28 x 31
+	//Scale is x22 larger.
+	protected static int[][] grid;
+	protected static Tile[][] board = new Tile[29][28];
 	//endRegion
 	
 	//Region: Animation Variables
@@ -56,7 +59,11 @@ public abstract class GameObject {
 	public int getX() {return gridX;}
 	public int getY() {return gridY;}
 	
-	public static void setGrid(int[][] g) { grid = g;}
+	public static void setGrid(int[][] g, Tile[][] t) 
+	{
+		grid = g; 
+		board = t;
+	}
 	//End Region
 	
 	//I ripped this straight out of the duck hunt code

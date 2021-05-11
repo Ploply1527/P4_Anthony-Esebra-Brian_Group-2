@@ -6,8 +6,10 @@ public class PacMan extends GameObject{
 
 	//Region: Player Data
 	private boolean isAlive = true;
-	private boolean startUp = true;
+	private boolean startUp = false;
 	private final int speed = 3;
+	
+	private boolean collide = false;
 	//endRegion
 	
 	//Region: Pacman sprites
@@ -59,53 +61,72 @@ public class PacMan extends GameObject{
 	}
 	
 	///This is the actual stuff for the movement
-	public void movement(int direction)
+	public void movement(Direction d)
 	{
 		boolean vertical = false;
 		int dir = 1;
+		collide = false;
+		
 		//0: Up    1: Down   2: Left    3: Right
-		switch(direction)
+		//Collision within the 
+		switch(d)
 		{
-		case 0://Move Up
+		case Up://Move Up
 			vertical = true;
 			dir = -1;
+			//Collision Up
+			//System.out.print(grid[(gridY)][gridX]);
+			/*if(grid[gridY][gridX] % 4 == 0)
+			 * {
+			 * collide = true;
+			 * }
+			*/
+			//System.out.println((grid[gridX][gridX] % 4));
 			break;
-		case 1://Move Down
+		case Down://Move Down
 			vertical = true;
 			dir = 1;
+			//Collision Down
 			break;
-		case 2://Move Left
+		case Left://Move Left
 			vertical = false;
 			dir = -1;
+			//Collision Left
 			break;
 		default://Move Right
 			vertical = false;
 			dir = 1;
+			//Collision Right
 			break;
 		}
+		
 		
 		if(!isAlive || startUp)//Makes PacMan stay in place when dead
 		{
 			dir = 0;
+			System.out.print("Stuff");
 		}
 			
 		//Move PacMan
 		if(vertical)
 		{
 			posY += speed * dir;
-			gridY = Math.round(posY/22);
+			gridY = Math.round((posY)/22);
 		}
 		else
 		{
 			posX += speed * dir;	
 			
 			//Sideways warp thing
-			if(posX < -3) { posX = 681;}
-			else if(posX > 684) { posX = 0;}
+			if(posX < -3) { posX = 618;}
+			else if(posX > 616) { posX = 0;}
 			
 			gridX = Math.round(posX/22);
 		}
 
+		tx.setToTranslation(posX, posY - 17);
 		//Adjust his grid position
+		//System.out.print(grid[gridY][gridX]);
+		System.out.println("Grid:[" + posX/22 + ", " + gridY + "]");
 	}
 }
