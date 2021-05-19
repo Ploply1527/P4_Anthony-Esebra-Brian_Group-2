@@ -43,11 +43,13 @@ public class Tile {
 	//This will be used to draw pellets
 	public void paint(Graphics g)
 	{
+		
 		if(tileType%4 == 0)
 		{
 			g.setColor(Color.red);
 			g.fillRect(x, y, 22, 22);
 		}
+		
 	}
 	///This will be used for collision detection
 	public int getTileType()

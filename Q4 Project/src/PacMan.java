@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,6 +23,7 @@ public class PacMan extends GameObject{
 	public PacMan(int xGrid, int yGrid, String imageName) {
 		super(xGrid, yGrid, imageName);
 		// TODO Auto-generated constructor stub
+		posY -= 9;
 	}
 
 	@Override
@@ -30,6 +32,8 @@ public class PacMan extends GameObject{
 		animation();
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(baseImage, tx, null);
+		g.setColor(Color.blue);
+		g.fillRect(posX, posY, 4, 4);
 	}
 
 	protected void animation() {
@@ -65,7 +69,6 @@ public class PacMan extends GameObject{
 	{
 		boolean vertical = false;
 		int dir = 1;
-		collide = false;
 		
 		//0: Up    1: Down   2: Left    3: Right
 		//Collision within the 
@@ -74,13 +77,10 @@ public class PacMan extends GameObject{
 		case Up://Move Up
 			vertical = true;
 			dir = -1;
-			//Collision Up
-			//System.out.print(grid[(gridY)][gridX]);
-			/*if(grid[gridY][gridX] % 4 == 0)
-			 * {
-			 * collide = true;
-			 * }
-			*/
+
+			//int tempPos = posY - 12;
+			//if(tempPos < 0) {tempPos = 0;}
+			//collide = (grid[(tempPos)/22][gridX] % 4 == 0);
 			//System.out.println((grid[gridX][gridX] % 4));
 			break;
 		case Down://Move Down
@@ -100,11 +100,14 @@ public class PacMan extends GameObject{
 			break;
 		}
 		
+		CollisionCheck(vertical, dir);//This is the void that does the collision checks
 		
-		if(!isAlive || startUp)//Makes PacMan stay in place when dead
+		System.out.print("Stuff: " + dir + " ");
+		
+		if(!isAlive || startUp || collide)//Makes PacMan stay in place when dead
 		{
 			dir = 0;
-			System.out.print("Stuff");
+			
 		}
 			
 		//Move PacMan
@@ -124,9 +127,30 @@ public class PacMan extends GameObject{
 			gridX = Math.round(posX/22);
 		}
 
-		tx.setToTranslation(posX, posY - 17);
+		tx.setToTranslation(posX - 10, posY - 17);
 		//Adjust his grid position
-		//System.out.print(grid[gridY][gridX]);
+		System.out.print(grid[gridX][gridY]);
 		System.out.println("Grid:[" + posX/22 + ", " + gridY + "]");
+	}
+	
+	private void CollisionCheck(boolean vertical, int dir)
+	{
+		int tempPos;
+		if(vertical)
+		{
+			tempPos = posY + 12 * dir;
+			collide = (grid[(tempPos)/22][gridX] % 4 == 0);
+		}
+		
+		else
+		{
+			tempPos = posX + 12 * dir;
+			int upY = posY - 9;
+			int downY = posY + 9;
+			collide = ((grid[gridY][((tempPos)/22)%27] % 4 == 0) &&
+					   (grid[upY / 22][((tempPos)/22)%27] % 4 == 0)&&
+			           (grid[downY/22][((tempPos)/22)%27] % 4 == 0));
+		}
+		
 	}
 }

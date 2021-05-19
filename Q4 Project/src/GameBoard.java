@@ -130,6 +130,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 				board[i][o] = new Tile(tileSet[i][o],o,i);
 			}
 		}
+		GameObject.setGrid(tileSet, board);
 		System.out.println("Done!");
 	}
 	
@@ -145,7 +146,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	}
 	void SetObjects()
 	{
-		
 	}
 	
 	public void keyPressed(KeyEvent arg0) {
