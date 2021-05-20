@@ -31,6 +31,8 @@ public class Ghost extends GameObject{
 	protected void movement()
 	{
 		
+		
+		tx.setToTranslation(posX - 10, posY - 17);
 	}
 	//endRegion
 	
@@ -45,6 +47,11 @@ public class Ghost extends GameObject{
 	//This is the collision done with the pacMan stuff
 	public void collision(PacMan p)
 	{
+		if((p.getX() <= posX - 7 && p.getX() >= posX - 13) &&
+		   (p.getY() <= posY - 14 && p.getY() >= posY - 20))
+		{
+			
+		}
 		
 	}
 	//This method should be called when pacman eats the ghost

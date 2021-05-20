@@ -10,13 +10,23 @@ public class PacMan extends GameObject{
 	private boolean startUp = false;
 	private final int speed = 3;
 	
-	private boolean collide = false;
+	Direction movement = Direction.Right;
 	//endRegion
 	
 	//Region: Pacman sprites
-	Image pacMan1 = getImage("PacMan1.png");
-	Image pacMan2;
-	Image pacMan3;
+	Image pacRight1 = getImage("PacRight1.png");
+	Image pacRight2 = getImage("PacRight2.png");
+	
+	Image pacLeft1 = getImage("PacLeft1.png");;
+	Image pacLeft2 = getImage("PacLeft1.png");;
+	
+	Image pacUp1 = getImage("PacUp1.png");;
+	Image pacUp2 = getImage("PacUp1.png");;
+	
+	Image pacDown1 = getImage("PacDown1.png");;
+	Image pacDown2 = getImage("PacDown1.png");;
+	
+	Image pacClose3 = getImage("PacClose.png");
 	//endRegion
 	
 	
@@ -32,8 +42,10 @@ public class PacMan extends GameObject{
 		animation();
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(baseImage, tx, null);
+		/*
 		g.setColor(Color.blue);
 		g.fillRect(posX, posY, 4, 4);
+		*/
 	}
 
 	protected void animation() {
@@ -41,11 +53,44 @@ public class PacMan extends GameObject{
 		timerCount++;
 		if(isAlive)
 		{   //Default pacman animation
-			switch(timerCount/20)
+			switch(timerCount/5)
 			{
 			case 0:
+				switch(movement)
+				{
+					case Up:
+						baseImage = pacUp1;
+						break;
+					case Down:
+						baseImage = pacDown1;
+						break;
+					case Left:
+						baseImage = pacLeft1;
+						break;
+					default:
+						baseImage = pacRight1;
+						break;
+				}
 				break;
 			case 1:
+				switch(movement)
+				{
+					case Up:
+						baseImage = pacUp2;
+						break;
+					case Down:
+						baseImage = pacDown2;
+						break;
+					case Left:
+						baseImage = pacLeft2;
+						break;
+					default:
+						baseImage = pacRight2;
+						break;
+				}
+				break;
+			case 2:
+				baseImage = pacClose3;
 				break;
 			default:
 				timerCount = 0;
@@ -77,30 +122,29 @@ public class PacMan extends GameObject{
 		case Up://Move Up
 			vertical = true;
 			dir = -1;
-
-			//int tempPos = posY - 12;
-			//if(tempPos < 0) {tempPos = 0;}
-			//collide = (grid[(tempPos)/22][gridX] % 4 == 0);
-			//System.out.println((grid[gridX][gridX] % 4));
+			tx.setToQuadrantRotation(0);
 			break;
 		case Down://Move Down
 			vertical = true;
 			dir = 1;
+			tx.setToQuadrantRotation(1);
 			//Collision Down
 			break;
 		case Left://Move Left
 			vertical = false;
 			dir = -1;
+			tx.rotate(Math.PI/2);
 			//Collision Left
 			break;
 		default://Move Right
 			vertical = false;
 			dir = 1;
+			tx.setToQuadrantRotation(3);
 			//Collision Right
 			break;
 		}
 		
-		CollisionCheck(vertical, dir);//This is the void that does the collision checks
+		CollisionCheck(vertical, dir, 4);//This is the void that does the collision checks
 		
 		System.out.print("Stuff: " + dir + " ");
 		
@@ -128,29 +172,11 @@ public class PacMan extends GameObject{
 		}
 
 		tx.setToTranslation(posX - 10, posY - 17);
+		
+		movement = d;
+		
 		//Adjust his grid position
 		System.out.print(grid[gridX][gridY]);
 		System.out.println("Grid:[" + posX/22 + ", " + gridY + "]");
-	}
-	
-	private void CollisionCheck(boolean vertical, int dir)
-	{
-		int tempPos;
-		if(vertical)
-		{
-			tempPos = posY + 12 * dir;
-			collide = (grid[(tempPos)/22][gridX] % 4 == 0);
-		}
-		
-		else
-		{
-			tempPos = posX + 12 * dir;
-			int upY = posY - 9;
-			int downY = posY + 9;
-			collide = ((grid[gridY][((tempPos)/22)%27] % 4 == 0) &&
-					   (grid[upY / 22][((tempPos)/22)%27] % 4 == 0)&&
-			           (grid[downY/22][((tempPos)/22)%27] % 4 == 0));
-		}
-		
 	}
 }

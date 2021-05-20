@@ -41,16 +41,16 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{a,1,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,1,a},//8
 	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//9
 	{a,a,a,a,a,a,1,a,a,a,a,a,3,a,a,3,a,a,a,a,a,1,a,a,a,a,a,a},//10
-	{a,a,a,a,a,a,1,a,a,a,a,a,3,a,a,3,a,a,a,a,a,1,a,a,a,a,a,a},//11
-	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//12
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//13
+	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//11
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//12
+	{a,a,a,a,a,a,1,a,a,3,a,3,3,4,4,3,3,a,3,a,a,1,a,a,a,a,a,a},//13
 	{3,3,3,3,3,3,1,3,3,3,a,3,3,4,4,3,3,a,3,3,3,1,3,3,3,3,3,3},//14
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//15
-	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//16
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//17
+	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//15
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//16
+	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//17
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//18
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//19
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//20
+	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//19
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//20
 	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//21
 	{a,2,1,1,a,a,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,a,a,1,1,2,a},//22
 	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//23
@@ -66,7 +66,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
 	//Region: Pac Man
 	PacMan pacMan = new PacMan(14,22,"Pacman1.png");
-	Direction direction = Direction.Right;
+	Direction direction = Direction.Up;
 	
 	/*
 	//Region: Ghosts
@@ -105,7 +105,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(616,660);
+		frame.setSize(616,670);
 		
 		frame.setBackground(Color.black);
 		frame.setResizable(false);
@@ -127,11 +127,18 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		{
 			for(int o = 0; o < tileSet[i].length; o++)
 			{
-				board[i][o] = new Tile(tileSet[i][o],o,i);
+				board[i][o] = new Tile(tileSet[i][o],o,i, 0);
 			}
 		}
 		GameObject.setGrid(tileSet, board);
 		System.out.println("Done!");
+	}
+	
+	
+	private int neighborTileCheck()
+	{
+		//Up,Right,Down,Left
+		return 0;
 	}
 	
 	void DrawTiles(Graphics g)
@@ -187,7 +194,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
-		tx.scale(0.514, 0.468);
+		tx.scale(0.514, 0.476);
 	}
 	
 	private Image getImage(String path) {

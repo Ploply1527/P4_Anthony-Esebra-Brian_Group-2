@@ -14,6 +14,7 @@ public abstract class GameObject {
 	
 	protected int posX;//This is the x pixel position the ghost is on the screen
 	protected int posY;//This is the y pixel position the ghost is on the screen
+	protected boolean collide = false;
 	protected AffineTransform tx = AffineTransform.getTranslateInstance(posX, posY);
 	
 	//PacMan board is 28 x 31
@@ -52,6 +53,27 @@ public abstract class GameObject {
 	protected int checkTile()
 	{
 		return 0;
+	}
+	
+	protected void CollisionCheck(boolean vertical, int dir, int div)
+	{
+		int tempPos;
+		if(vertical)
+		{
+			tempPos = posY + 12 * dir;
+			collide = (grid[(tempPos)/22][gridX] % div == 0);
+		}
+		
+		else
+		{
+			tempPos = posX + 12 * dir;
+			int upY = posY - 9 + 10;
+			int downY = posY + 9 + 10;
+			collide = ((grid[gridY][((tempPos)/22)%27] % div == 0) &&
+					   (grid[upY / 22][((tempPos)/22)%27] % div == 0)&&
+			           (grid[downY/22][((tempPos)/22)%27] % div == 0));
+		}
+		
 	}
 	//endRegion
 	

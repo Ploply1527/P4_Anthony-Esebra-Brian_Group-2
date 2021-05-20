@@ -12,17 +12,18 @@ public class Tile {
 	
 	private int tileType;//This determines what type of tile this is
 	
-	private Image tileSprite;
+	private Image tileSprite;//This is the tile sprite
 	
-	public Tile(int tType, int gx, int gy)
+	public Tile(int tType, int gx, int gy, int wallSprite)
 	{
 		x = gx*22;
 		y = gy*22;
 		
 		tileType = tType;
+		
 		switch(tType) {
 		case 0:
-			//Set wall tile
+			setWallType(wallSprite); //Set wall tile
 			break;
 		case 1:
 			pelletCount++;//Increase amount of pellets there are
@@ -43,13 +44,7 @@ public class Tile {
 	//This will be used to draw pellets
 	public void paint(Graphics g)
 	{
-		
-		if(tileType%4 == 0)
-		{
-			g.setColor(Color.red);
-			g.fillRect(x, y, 22, 22);
-		}
-		
+		//debug(g);
 	}
 	///This will be used for collision detection
 	public int getTileType()
@@ -71,9 +66,19 @@ public class Tile {
 	
 	//Region:Helper Voids
 	///This is a void that is meant to set the different types of wall sprite it will use
-	private void setWallType()
+	public void setWallType(int wallType)
 	{
-		
+		//IntValue = Up,Right,Down,Right
 	}
 	//endRegion
+	
+	//Region:Debug
+	private void debug(Graphics g)
+	{
+		if(tileType%4 == 0)
+		{
+			g.setColor(Color.red);
+			g.fillRect(x, y, 22, 22);
+		}
+	}
 }
