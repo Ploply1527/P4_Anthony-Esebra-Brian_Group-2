@@ -30,6 +30,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	// 0 = false, 1 = true/has pellet, 2 = true/big pellet, 3 = true/no Pellet, 4 = ghost only
 	int [][] tileSet =
 	{
+			
+	// arrangement represents collision
+			
   //{1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,9,0}
 	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a},//1
 	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//2
