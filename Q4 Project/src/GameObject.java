@@ -29,6 +29,8 @@ public abstract class GameObject {
 	protected final int changeFrame = 20; //This is how many frames later animation will change
 	//endRegion
 	
+	//Region: GameState Variables
+	protected static boolean gameOver = false;
 	public GameObject(int xGrid, int yGrid, String imgName)
 	{
 		gridX = xGrid;

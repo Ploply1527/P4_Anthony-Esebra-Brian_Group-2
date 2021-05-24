@@ -14,20 +14,28 @@ public class PacMan extends GameObject{
 	//endRegion
 	
 	//Region: Pacman sprites
+	
+	//Region: Alive sprites
 	Image pacRight1 = getImage("PacRight1.png");
 	Image pacRight2 = getImage("PacRight2.png");
 	
 	Image pacLeft1 = getImage("PacLeft1.png");;
-	Image pacLeft2 = getImage("PacLeft1.png");;
+	Image pacLeft2 = getImage("PacLeft2.png");;
 	
 	Image pacUp1 = getImage("PacUp1.png");;
-	Image pacUp2 = getImage("PacUp1.png");;
+	Image pacUp2 = getImage("PacUp2.png");;
 	
 	Image pacDown1 = getImage("PacDown1.png");;
-	Image pacDown2 = getImage("PacDown1.png");;
+	Image pacDown2 = getImage("PacDown2.png");;
 	
 	Image pacClose3 = getImage("PacClose.png");
 	//endRegion
+	
+	//Region: Dead sprites
+	Image pacDead;
+	//endregion
+	
+	//endregion
 	
 	
 	public PacMan(int xGrid, int yGrid, String imageName) {
@@ -48,6 +56,10 @@ public class PacMan extends GameObject{
 		*/
 	}
 
+	public void Die()
+	{
+		
+	}
 	protected void animation() {
 		// TODO Auto-generated method stub
 		timerCount++;

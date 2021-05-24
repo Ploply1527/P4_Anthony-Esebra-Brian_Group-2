@@ -65,17 +65,15 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//Region: GameObjects
 
 	//Region: Pac Man
-	PacMan pacMan = new PacMan(14,22,"Pacman1.png");
+	PacMan pacMan = new PacMan(14,22,"PacClose.png");
 	Direction direction = Direction.Up;
 	
-	/*
 	//Region: Ghosts
 	Ghost[] ghostList = new Ghost[4];
-	Ghost blue = new Ghost(1,1,"Blue");
-	Ghost orange = new Ghost(1,1,"Blue");
-	Ghost red = new Ghost(1,1,"Blue");
-	Ghost pink = new Ghost(1,1,"Blue");
-	*/
+	Ghost blue = new Ghost(12,12,"blue1","blue2");
+	Ghost orange = new Ghost(12,14,"orange1","orange2");
+	Ghost red = new Ghost(15,12,"red1","red2");
+	Ghost pink = new Ghost(15,14,"pink1","pink2");
 	//endRegion
 
 	///This is the base logic for the game board 
