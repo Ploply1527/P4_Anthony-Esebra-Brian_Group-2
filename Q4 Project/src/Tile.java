@@ -1,8 +1,12 @@
 import java.awt.Image;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Tile {
+	
+	private int x;
+	private int y;
 	
 	public static int pelletCount;//This checks how many pellets the board has in total
 	
@@ -10,8 +14,11 @@ public class Tile {
 	
 	private Image tileSprite;
 	
-	public Tile(int tType)
+	public Tile(int tType, int gx, int gy)
 	{
+		x = gx*22;
+		y = gy*22;
+		
 		tileType = tType;
 		switch(tType) {
 		case 0:
@@ -36,6 +43,13 @@ public class Tile {
 	//This will be used to draw pellets
 	public void paint(Graphics g)
 	{
+		
+	//	if(tileType%4 == 0)
+	//	{
+	//		g.setColor(Color.blue);
+	//		g.fillRect(x, y, 22, 22);
+	//	}
+		
 	}
 	///This will be used for collision detection
 	public int getTileType()
