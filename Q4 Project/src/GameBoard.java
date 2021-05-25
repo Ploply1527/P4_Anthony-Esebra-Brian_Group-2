@@ -80,6 +80,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	Ghost pink = new Ghost(1,1,"Blue");
 	*/
 	//endRegion
+	
 
 	///This is the base logic for the game board 
 	public void paint(Graphics g)
