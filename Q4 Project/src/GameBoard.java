@@ -60,7 +60,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//24
 	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//25
 	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//26
-	{a,1,a,a,a,a,a,a,a,a,a,a,1,1,1,1,a,a,a,a,a,a,a,a,a,a,1,a},//27
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//27
 	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//28
 	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a} //29
 	};
