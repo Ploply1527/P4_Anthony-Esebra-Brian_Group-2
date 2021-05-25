@@ -19,14 +19,14 @@ public class PacMan extends GameObject{
 	Image pacRight1 = getImage("PacRight1.png");
 	Image pacRight2 = getImage("PacRight2.png");
 	
-	Image pacLeft1 = getImage("PacLeft1.png");;
-	Image pacLeft2 = getImage("PacLeft2.png");;
+	Image pacLeft1 = getImage("PacLeft1.png");
+	Image pacLeft2 = getImage("PacLeft2.png");
 	
-	Image pacUp1 = getImage("PacUp1.png");;
-	Image pacUp2 = getImage("PacUp2.png");;
+	Image pacUp1 = getImage("PacUp1.png");
+	Image pacUp2 = getImage("PacUp2.png");
 	
-	Image pacDown1 = getImage("PacDown1.png");;
-	Image pacDown2 = getImage("PacDown2.png");;
+	Image pacDown1 = getImage("PacDown1.png");
+	Image pacDown2 = getImage("PacDown2.png");
 	
 	Image pacClose3 = getImage("PacClose.png");
 	//endRegion
@@ -145,7 +145,7 @@ public class PacMan extends GameObject{
 		case Left://Move Left
 			vertical = false;
 			dir = -1;
-			tx.rotate(Math.PI/2);
+			tx.setToQuadrantRotation(2);
 			//Collision Left
 			break;
 		default://Move Right

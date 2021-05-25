@@ -43,8 +43,8 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{a,a,a,a,a,a,1,a,a,a,a,a,3,a,a,3,a,a,a,a,a,1,a,a,a,a,a,a},//10
 	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//11
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//12
-	{a,a,a,a,a,a,1,a,a,3,a,3,3,4,4,3,3,a,3,a,a,1,a,a,a,a,a,a},//13
-	{3,3,3,3,3,3,1,3,3,3,a,3,3,4,4,3,3,a,3,3,3,1,3,3,3,3,3,3},//14
+	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//13
+	{3,3,3,3,3,3,1,3,3,3,a,3,3,3,3,3,3,a,3,3,3,1,3,3,3,3,3,3},//14
 	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//15
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//16
 	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//17
@@ -69,11 +69,11 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	Direction direction = Direction.Up;
 	
 	//Region: Ghosts
-	Ghost[] ghostList = new Ghost[4];
-	Ghost blue = new Ghost(12,12,"blue1","blue2");
-	Ghost orange = new Ghost(12,14,"orange1","orange2");
-	Ghost red = new Ghost(15,12,"red1","red2");
-	Ghost pink = new Ghost(15,14,"pink1","pink2");
+	//TODO: THeres an issue when generating ghosts
+	Ghost blue = new Ghost(13,13,"blue1.png","blue2.png");
+	Ghost orange = new Ghost(12,15,"orange1.png","orange2.png");
+	Ghost red = new Ghost(15,13,"red1.png","red2.png");
+	Ghost pink = new Ghost(16,15,"pink1.png","pink2.png");
 	//endRegion
 
 	///This is the base logic for the game board 
@@ -88,6 +88,16 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		DrawTiles(g);
 		pacMan.paint(g);
 		pacMan.movement(direction);
+		
+		blue.movCol(pacMan);	
+		orange.movCol(pacMan);		
+		red.movCol(pacMan);		
+		pink.movCol(pacMan);
+		
+		blue.paint(g);
+		orange.paint(g);
+		red.paint(g);
+		pink.paint(g);
 	}
 	
 	//This is the constructor for the gameboard
