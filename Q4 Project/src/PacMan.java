@@ -9,7 +9,7 @@ public class PacMan extends GameObject{
 	private boolean isAlive = true;
 	private boolean startUp = false;
 	private final int speed = 3;
-	
+	private int lives = 3;
 	Direction movement = Direction.Right;
 	//endRegion
 	
@@ -41,13 +41,15 @@ public class PacMan extends GameObject{
 	public PacMan(int xGrid, int yGrid, String imageName) {
 		super(xGrid, yGrid, imageName);
 		// TODO Auto-generated constructor stub
-		posY -= 9;
+		posY -= 12;
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stud
 		animation();
+		pelletEat();
+		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(baseImage, tx, null);
 		/*
@@ -55,10 +57,15 @@ public class PacMan extends GameObject{
 		g.fillRect(posX, posY, 4, 4);
 		*/
 	}
-
+	
+	public void reset()
+	{
+		super.reset();
+	}
+	
 	public void Die()
 	{
-		
+		reset();
 	}
 	protected void animation() {
 		// TODO Auto-generated method stub
@@ -113,9 +120,10 @@ public class PacMan extends GameObject{
 		{  //Pacman death animation
 			if(timerCount != 0) { timerCount = 0; }
 			
-			switch(timerCount/10)
+			switch(timerCount/4)
 			{
-			
+				default:
+					break;
 			}
 		}
 		
@@ -134,31 +142,22 @@ public class PacMan extends GameObject{
 		case Up://Move Up
 			vertical = true;
 			dir = -1;
-			tx.setToQuadrantRotation(0);
 			break;
 		case Down://Move Down
 			vertical = true;
 			dir = 1;
-			tx.setToQuadrantRotation(1);
-			//Collision Down
 			break;
 		case Left://Move Left
 			vertical = false;
 			dir = -1;
-			tx.setToQuadrantRotation(2);
-			//Collision Left
 			break;
 		default://Move Right
 			vertical = false;
 			dir = 1;
-			tx.setToQuadrantRotation(3);
-			//Collision Right
 			break;
 		}
 		
 		CollisionCheck(vertical, dir, 4);//This is the void that does the collision checks
-		
-		System.out.print("Stuff: " + dir + " ");
 		
 		if(!isAlive || startUp || collide)//Makes PacMan stay in place when dead
 		{
@@ -177,18 +176,45 @@ public class PacMan extends GameObject{
 			posX += speed * dir;	
 			
 			//Sideways warp thing
-			if(posX < -3) { posX = 618;}
-			else if(posX > 616) { posX = 0;}
+			if(posX < 1) { posX = 613;}
+			else if(posX > 614) { posX = 2;}
 			
 			gridX = Math.round(posX/22);
 		}
 
-		tx.setToTranslation(posX - 10, posY - 17);
+		tx.setToTranslation(posX - 14, posY - 17);
 		
 		movement = d;
 		
 		//Adjust his grid position
-		System.out.print(grid[gridX][gridY]);
-		System.out.println("Grid:[" + posX/22 + ", " + gridY + "]");
+	}
+	
+	//This is the class that is in charge of pellet eating
+	//There is something wierd about this part
+	private void pelletEat()
+	{
+		switch(board[gridY][gridX].getTileType())
+		{
+		case 1:
+			board[gridY][gridX].pelletGet();
+			GUI.score += 10;
+			break;
+		case 2:
+			board[gridY][gridX].pelletGet();
+			GUI.score += 50;
+			Ghost.gVul = 4;
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
+	private void Debug(int dir)
+	{
+		System.out.print("Dir: " + dir + " ");
+
+		System.out.print(board[gridY][gridX].getTileType());
+		System.out.println(" Grid:[" + gridX + ", " + gridY + "]");
 	}
 }

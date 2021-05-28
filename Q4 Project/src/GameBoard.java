@@ -17,9 +17,6 @@ import javax.swing.Timer;
 
 public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
-	//PacMan board is 28 x 31
-	//Scale is x22 larger.
-	public Tile[][] board = new Tile[29][28];
 	//The board for pacMan
 	private Image boardImage = getImage("PacBoard.png");
 
@@ -27,39 +24,40 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	private final int a = 0;
 	//The move ability of the board
+	//PacMan board is 28 x 31
 	// 0 = false, 1 = true/has pellet, 2 = true/big pellet, 3 = true/no Pellet, 4 = ghost only
 	int [][] tileSet =
 	{
-  //{1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8,9,0}
-	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a},//1
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//2
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//3
-	{a,2,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,2,a},//4
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//5
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//6
+  //{0,1,2,3,4,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6}
+	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a},//0
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//1
+	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//2
+	{a,2,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,2,a},//3
+	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//4
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//5
+	{a,1,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,1,a},//6
 	{a,1,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,1,a},//7
-	{a,1,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,1,a},//8
-	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//9
-	{a,a,a,a,a,a,1,a,a,a,a,a,3,a,a,3,a,a,a,a,a,1,a,a,a,a,a,a},//10
-	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//11
+	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//8
+	{a,a,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,a,a},//9
+	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//10
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//11
 	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//12
-	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//13
-	{3,3,3,3,3,3,1,3,3,3,a,3,3,3,3,3,3,a,3,3,3,1,3,3,3,3,3,3},//14
-	{a,a,a,a,a,a,1,a,a,3,a,3,3,3,3,3,3,a,3,a,a,1,a,a,a,a,a,a},//15
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//16
-	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//17
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//18
-	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//19
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//20
-	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//21
-	{a,2,1,1,a,a,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,a,a,1,1,2,a},//22
+	{3,3,3,3,3,3,1,3,3,3,a,4,4,4,4,4,4,a,3,3,3,1,3,3,3,3,3,3},//13
+	{a,a,a,a,a,a,1,a,a,3,a,4,4,4,4,4,4,a,3,a,a,1,a,a,a,a,a,a},//14
+	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//15
+	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//16
+	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//17
+	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//18
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,a,a,1,1,1,1,1,1,1,1,1,1,1,1,a},//19
+	{a,1,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,1,a},//20
+	{a,2,1,1,a,a,1,1,1,1,1,1,1,3,3,1,1,1,1,1,1,1,a,a,1,1,2,a},//21
+	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//22
 	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//23
-	{a,a,a,1,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,1,a,a,a},//24
-	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//25
+	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//24
+	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//25
 	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//26
-	{a,1,a,a,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,a,a,1,a},//27
-	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//28
-	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a} //29
+	{a,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,a},//27
+	{a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a} //28
 	};
 	
 	//Region: GameObjects
@@ -70,10 +68,10 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	//Region: Ghosts
 	//TODO: THeres an issue when generating ghosts
-	Ghost blue = new Ghost(13,13,"blue1.png","blue2.png");
-	Ghost orange = new Ghost(12,15,"orange1.png","orange2.png");
-	Ghost red = new Ghost(15,13,"red1.png","red2.png");
-	Ghost pink = new Ghost(16,15,"pink1.png","pink2.png");
+	Ghost blue = new Ghost(13,14,"blue1.png","blue2.png");
+	Ghost orange = new Ghost(12,13,"orange1.png","orange2.png");
+	Ghost red = new Ghost(15,14,"red1.png","red2.png");
+	Ghost pink = new Ghost(16,13,"pink1.png","pink2.png");
 	//endRegion
 
 	///This is the base logic for the game board 
@@ -106,14 +104,13 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		init(0,0);
 		CreateFrame(); //This creates the game frame
 		
-		SetTiles();    //This sets all of the tiles
-		SetObjects();  //This sets all of the gameObjects
+		GameObject.setGrid(tileSet);//This sets all of the tiles
 	}
 	
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(616,670);
+		frame.setSize(616,660);
 		
 		frame.setBackground(Color.black);
 		frame.setResizable(false);
@@ -129,25 +126,15 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		frame.setVisible(true);
 	}
 	
-	void SetTiles()
+	//Region: Reseting
+	private void resetGame()
 	{
-		for(int i = 0; i < tileSet.length; i++)
-		{
-			for(int o = 0; o < tileSet[i].length; o++)
-			{
-				board[i][o] = new Tile(tileSet[i][o],o,i, 0);
-			}
-		}
-		GameObject.setGrid(tileSet, board);
-		System.out.println("Done!");
-	}
-	
-	
-	private int neighborTileCheck()
-	{
+		
 		//Up,Right,Down,Left
-		return 0;
 	}
+	
+	
+	//endRegion
 	
 	void DrawTiles(Graphics g)
 	{
@@ -155,33 +142,27 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		{
 			for(int o = 0; o < tileSet[i].length; o++)
 			{
-				board[i][o].paint(g);
+				GameObject.board[i][o].paint(g);
 			}
 		}
 	}
-	void SetObjects()
-	{
-	}
 	
+	//Region: Input
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub	
 		switch(arg0.getKeyCode()) {
 			
 			case 38: //up
 				direction = Direction.Up;
-				System.out.println("UP");
 				break;
 			case 40: //down
 				direction = Direction.Down;
-				System.out.println("Down");
 				break;
 			case 37://left
 				direction = Direction.Left;
-				System.out.println("Left");
 				break;	
 			case 39: //right
 				direction = Direction.Right;
-				System.out.println("Right");
 				break;
 		}
 		
@@ -204,6 +185,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		tx.setToTranslation(a, b);
 		tx.scale(0.514, 0.476);
 	}
+	//endRegion
 	
 	private Image getImage(String path) {
 		Image tempImage = null;

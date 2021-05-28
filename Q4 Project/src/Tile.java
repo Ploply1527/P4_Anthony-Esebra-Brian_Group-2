@@ -10,6 +10,7 @@ public class Tile {
 	
 	public static int pelletCount;//This checks how many pellets the board has in total
 	
+	private int initTile;//This is the original type of tile
 	private int tileType;//This determines what type of tile this is
 	
 	private Image tileSprite;//This is the tile sprite
@@ -19,6 +20,7 @@ public class Tile {
 		x = gx*22;
 		y = gy*22;
 		
+		initTile = tType;
 		tileType = tType;
 		
 		switch(tType) {
@@ -44,7 +46,8 @@ public class Tile {
 	//This will be used to draw pellets
 	public void paint(Graphics g)
 	{
-		//debug(g);
+		drawPellet(g);
+		debug(g);
 	}
 	///This will be used for collision detection
 	public int getTileType()
@@ -70,6 +73,25 @@ public class Tile {
 	{
 		//IntValue = Up,Right,Down,Right
 	}
+	private void drawPellet(Graphics g)
+	{
+		g.setColor(Color.LIGHT_GRAY);
+		switch(tileType)
+		{
+			case 1:
+				g.fillRect(x + 8, y + 7, 6, 6);
+				//Draw normal pellet
+				break;
+				
+			case 2:
+				g.fillOval(x+1, y+1, 20, 20);
+				//Draw big pellet
+				break;
+
+			default:
+				break;
+		}
+	}
 	//endRegion
 	
 	//Region:Debug
@@ -77,7 +99,7 @@ public class Tile {
 	{
 		if(tileType%4 == 0)
 		{
-			g.setColor(Color.red);
+			g.setColor(Color.gray);
 			g.fillRect(x, y, 22, 22);
 		}
 	}
