@@ -14,12 +14,17 @@ public abstract class GameObject {
 	
 	protected int posX;//This is the x pixel position the ghost is on the screen
 	protected int posY;//This is the y pixel position the ghost is on the screen
+	
+	protected int startX;//This is xGrid of where the gameObject will start from
+	protected int startY;//This is yGrid of where the gameObejct will start from
+	
+	protected boolean collide = false;
 	protected AffineTransform tx = AffineTransform.getTranslateInstance(posX, posY);
 	
 	//PacMan board is 28 x 31
 	//Scale is x22 larger.
 	protected static int[][] grid;
-	protected static Tile[][] board = new Tile[29][28];
+	protected static Tile[][] board = new Tile[29][30];
 	//endRegion
 	
 	//Region: Animation Variables
@@ -28,10 +33,18 @@ public abstract class GameObject {
 	protected final int changeFrame = 20; //This is how many frames later animation will change
 	//endRegion
 	
+	//Region: GameState Variables
+	protected static boolean gameOver = false;
+	protected static int boardReset = 0;
+	//endRegion
+	
+	
 	public GameObject(int xGrid, int yGrid, String imgName)
 	{
 		gridX = xGrid;
 		gridY = yGrid;
+		startX = xGrid;
+		startY = yGrid; 
 		
 		baseImage = getImage(imgName); //load the base image
 		posX = gridX * 22;
@@ -40,7 +53,7 @@ public abstract class GameObject {
 		init(posX, posY);//Initialize the position
 	}
 	
-	
+	//Region: Abstract voids
 	///This is going to be the main logic 
 	public abstract void paint(Graphics g);
 	
@@ -48,10 +61,37 @@ public abstract class GameObject {
 	//Protected means that only classes that inherit from this can access it
 	protected abstract void animation();
 	
-	//Region:Movement
-	protected int checkTile()
+	//endregion
+	
+	//This resets the gameObject
+	public void reset() 
 	{
-		return 0;
+		posX = startX; 
+		posY = startY;
+	}
+		
+	//Region:Movement
+	protected void CollisionCheck(boolean vertical, int dir, int div)
+	{
+		int tempPos;
+		if(vertical)
+		{
+			tempPos = posY + 12 * dir;
+			collide = (grid[(tempPos)/22][gridX] % div == 0)
+			|| (grid[(tempPos)/22][((posX + 2)/ 22)] % div == 0)
+			|| (grid[(tempPos)/22][((posX - 2)/ 22)] % div == 0);
+			
+		}
+		
+		else
+		{
+			tempPos = posX + (15 + (6*dir))* dir;
+			//radius 4
+			collide = (grid[gridY%28][((tempPos)/22)%28] % div == 0)
+			|| (grid[((posY + 2)/ 22)%28][((tempPos)/22)%28] % div == 0)  
+			|| (grid[((posY - 2)/ 22)%28][((tempPos)/22)%28] % div == 0);
+			           
+		}
 	}
 	//endRegion
 	
@@ -59,12 +99,26 @@ public abstract class GameObject {
 	public int getX() {return gridX;}
 	public int getY() {return gridY;}
 	
-	public static void setGrid(int[][] g, Tile[][] t) 
+	public static void setGrid(int[][] g) 
 	{
 		grid = g; 
-		board = t;
+		for(int i = 0; i < g.length; i++)
+		{
+			for(int o = 0; o < g[i].length; o++)
+			{
+				board[i][o] = new Tile(g[i][o],o,i, 0);
+			}
+		}
 	}
 	//End Region
+	
+	
+	//Game Resetting
+	public static void NewLife()
+	{
+		
+	}
+	
 	
 	//I ripped this straight out of the duck hunt code
 	protected Image getImage(String path) {
@@ -80,7 +134,7 @@ public abstract class GameObject {
 	
 	//This is for initialization
 	private void init(double a, double b) {
-		tx.setToTranslation(a, b);
+		tx.setToTranslation(a-14, b-17);
 		tx.scale(1, 1);
 	}
 }
