@@ -96,7 +96,7 @@ public class Ghost extends GameObject{
 			}
 		}
 		
-		if(gameOver)
+		if(!gameOver)
 		{
 			timerCount++;
 		}

@@ -170,7 +170,7 @@ public class PacMan extends GameObject{
 			}
 		}
 		
-		if(gameOver)
+		if(!gameOver)
 		{
 			timerCount++;
 		}
