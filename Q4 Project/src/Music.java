@@ -92,10 +92,15 @@ public class Music  implements Runnable  {
 		}
 	}
 
+	public void stop()
+	{
+		audioClip.stop();
+	}
 	@Override
 	public void run() {
-		// audioClip.start();
-		play();
+		audioClip.stop();
+		System.out.println("Stuff");
+		audioClip.start();
 	}
 	
 

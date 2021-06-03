@@ -8,38 +8,15 @@ public class Tile {
 	private int x;
 	private int y;
 	
-	public static int pelletCount;//This checks how many pellets the board has in total
+	public static int pelletCount = 0;//This checks how many pellets the board has in total
 	
-	private int initTile;//This is the original type of tile
 	private int tileType;//This determines what type of tile this is
-	
-	private Image tileSprite;//This is the tile sprite
 	
 	public Tile(int tType, int gx, int gy, int wallSprite)
 	{
 		x = gx*22;
 		y = gy*22;
-		
-		initTile = tType;
-		tileType = tType;
-		
-		switch(tType) {
-		case 0:
-			setWallType(wallSprite); //Set wall tile
-			break;
-		case 1:
-			pelletCount++;//Increase amount of pellets there are
-			//Set pellet tile
-			break;
-		case 2:
-			pelletCount++;//Increase amount of pellets there are
-			//Set big pellet tile
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		}
+		setTile(tType);
 	}
 	
 	//Region: Public voids
@@ -65,14 +42,26 @@ public class Tile {
 			//Set no pellet tile
 		}
 	}
+	
+	//Resets the tile to a type
+	public void setTile(int tType) 
+	{ 
+		tileType = tType; 
+		
+		switch(tType) {
+		case 1:
+			pelletCount++;//Increase amount of pellets there are
+			break;
+		case 2:
+			pelletCount++;//Increase amount of pellets there are
+			break;
+		default:
+			break;
+		}
+	}
 	//endRegion
 	
 	//Region:Helper Voids
-	///This is a void that is meant to set the different types of wall sprite it will use
-	public void setWallType(int wallType)
-	{
-		//IntValue = Up,Right,Down,Right
-	}
 	private void drawPellet(Graphics g)
 	{
 		g.setColor(Color.LIGHT_GRAY);

@@ -95,7 +95,11 @@ public class Ghost extends GameObject{
 					break;
 			}
 		}
-		timerCount++;
+		
+		if(gameOver)
+		{
+			timerCount++;
+		}
 	}
 	
 	protected void movement(PacMan p)
@@ -151,7 +155,7 @@ public class Ghost extends GameObject{
 		{
 			if(vulnerable && !eaten)
 			{
-				GUI.score += 1000;//Increase points by 1000
+				GUI.addScore(1000);//Increase points by 1000
 				eaten = true;
 			}
 			else if(!vulnerable)
@@ -196,7 +200,6 @@ public class Ghost extends GameObject{
 			gridX = Math.round(posX/22);
 		}
 	}
-	
 	private void moveToY(int pY, boolean recBreak)
 	{
 		if(posY == pY && recBreak)

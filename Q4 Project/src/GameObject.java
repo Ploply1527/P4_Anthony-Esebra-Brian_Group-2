@@ -35,7 +35,6 @@ public abstract class GameObject {
 	
 	//Region: GameState Variables
 	protected static boolean gameOver = false;
-	protected static int boardReset = 0;
 	//endRegion
 	
 	
@@ -63,11 +62,20 @@ public abstract class GameObject {
 	
 	//endregion
 	
+	//Game Resetting
+	public static void freeze()
+	{
+		gameOver = true;
+	}
+		
 	//This resets the gameObject
 	public void reset() 
 	{
-		posX = startX; 
-		posY = startY;
+		gameOver = false;
+		gridX = startX;
+		gridY = startY;
+		posX = startX * 22; 
+		posY = startY * 22 - 9;
 	}
 		
 	//Region:Movement
@@ -76,21 +84,27 @@ public abstract class GameObject {
 		int tempPos;
 		if(vertical)
 		{
-			tempPos = posY + 12 * dir;
-			collide = (grid[(tempPos)/22][gridX] % div == 0)
-			|| (grid[(tempPos)/22][((posX + 2)/ 22)] % div == 0)
-			|| (grid[(tempPos)/22][((posX - 2)/ 22)] % div == 0);
+			tempPos = (posY + 12 * dir)/22;
+			collide = (grid[tempPos][gridX] % div == 0)
+			|| (grid[tempPos][((posX + 2)/ 22)] % div == 0)
+			|| (grid[tempPos][((posX - 2)/ 22)] % div == 0);
 			
 		}
 		
 		else
 		{
-			tempPos = posX + (15 + (6*dir))* dir;
-			//radius 4
-			collide = (grid[gridY][((tempPos)/22)] % div == 0)
-			|| (grid[((posY + 2)/ 22)][((tempPos)/22)] % div == 0)  
-			|| (grid[((posY - 2)/ 22)][((tempPos)/22)] % div == 0);
-			           
+			tempPos = (posX + (15 + (6*dir))* dir)/22;
+			//Took the easy way out of a problem. Never punished lol
+			try 
+			{
+				collide = (grid[gridY][tempPos] % div == 0)
+					|| (grid[((posY + 2)/ 22)][tempPos] % div == 0)  
+					|| (grid[((posY - 2)/ 22)][tempPos] % div == 0);
+		    } 
+			catch(ArrayIndexOutOfBoundsException e) 
+			{
+				tempPos -= 1;
+		    }         
 		}
 	}
 	//endRegion
@@ -99,25 +113,19 @@ public abstract class GameObject {
 	public int getX() {return gridX;}
 	public int getY() {return gridY;}
 	
-	public static void setGrid(int[][] g) 
+	public static void setGrid(int[][] g, boolean first) 
 	{
 		grid = g; 
 		for(int i = 0; i < g.length; i++)
 		{
 			for(int o = 0; o < g[i].length; o++)
 			{
-				board[i][o] = new Tile(g[i][o],o,i, 0);
+				if(first) {board[i][o] = new Tile(g[i][o],o,i, 0);}
+				else { board[i][o].setTile(g[i][o]);}
 			}
 		}
 	}
 	//End Region
-	
-	
-	//Game Resetting
-	public static void NewLife()
-	{
-		
-	}
 	
 	
 	//I ripped this straight out of the duck hunt code

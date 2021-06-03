@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -17,10 +18,30 @@ import javax.swing.Timer;
 
 public class GameBoard extends JPanel implements ActionListener, KeyListener{
 
+	//The titleScreen
+	private Image titleScreen = getImage("Title.png");
+	private boolean startGame = false;
+	private boolean startUp = true;
+	
+	//Region:Timers
+	private int startUpTimer = 0;
+	private int waitTimer = 0;
+	//endRegion
+	
+	//Region: Chimes
+	Music startChime;
+	//EndRegion
+	
 	//The board for pacMan
 	private Image boardImage = getImage("PacBoard.png");
-
 	private AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
+	
+	
+	//Region: Triggers
+	public static boolean resetTrig = false;
+	public static boolean deadTrig = false;
+	boolean levelBeat = false;
+	//endRegion
 	
 	private final int a = 0;
 	//The move ability of the board
@@ -61,58 +82,76 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	};
 	
 	//Region: GameObjects
-
 	//Region: Pac Man
-	PacMan pacMan = new PacMan(14,22,"PacClose.png");
-	Direction direction = Direction.Up;
+	static PacMan pacMan = new PacMan(14,22,"PacClose.png");
+	static Direction direction = Direction.Up;
 	
 	//Region: Ghosts
 	//TODO: THeres an issue when generating ghosts
-	Ghost blue = new Ghost(13,14,"blue1.png","blue2.png");
-	Ghost orange = new Ghost(12,13,"orange1.png","orange2.png");
-	Ghost red = new Ghost(15,14,"red1.png","red2.png");
-	Ghost pink = new Ghost(16,13,"pink1.png","pink2.png");
+	static Ghost blue = new Ghost(13,14,"blue1.png","blue2.png");
+	static Ghost orange = new Ghost(12,13,"orange1.png","orange2.png");
+	static Ghost red = new Ghost(15,14,"red1.png","red2.png");
+	static Ghost pink = new Ghost(16,13,"pink1.png","pink2.png");
 	//endRegion
-
+	GUI gui = new GUI();
+	//endRegion
+	
 	///This is the base logic for the game board 
 	public void paint(Graphics g)
 	{
-		//Refresh is not working
 		super.paintComponent(g);// This is for refresh
 		
+		g.setColor(Color.black);
+		g.fillRect(0, 0, 616, 720);
+		
 		Graphics2D g2 = (Graphics2D) g;
-		g2.drawImage(boardImage, tx, null); 
+		if(startGame)
+		{
+			g2.drawImage(boardImage, tx, null); 
+			DrawTiles(g);
+			if(startUp)
+			{
+				startUp();	
+			}
+			else
+			{
+				pacMan.movement(direction);
+				pacMan.paint(g);
+				
+				blue.movCol(pacMan);	
+				orange.movCol(pacMan);		
+				red.movCol(pacMan);		
+				pink.movCol(pacMan);
+
+				blue.paint(g);
+				orange.paint(g);
+				red.paint(g);
+				pink.paint(g);
+			}
+		}
+		else
+		{
+			g2.drawImage(titleScreen, tx, null);  //TitleScreen	
+		}
 		
-		DrawTiles(g);
-		pacMan.paint(g);
-		pacMan.movement(direction);
-		
-		blue.movCol(pacMan);	
-		orange.movCol(pacMan);		
-		red.movCol(pacMan);		
-		pink.movCol(pacMan);
-		
-		blue.paint(g);
-		orange.paint(g);
-		red.paint(g);
-		pink.paint(g);
+		resetTriggers();
 	}
 	
 	//This is the constructor for the gameboard
 	public GameBoard()
 	{
-		init(0,0);
+		init(0,35);
 		CreateFrame(); //This creates the game frame
 		
-		GameObject.setGrid(tileSet);//This sets all of the tiles
+		GUI.reset();//Initialize pacman life
+		GameObject.setGrid(tileSet,true);//This sets all of the tiles
 	}
 	
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(616,660);
+		frame.setSize(616,720);
 		
-		frame.setBackground(Color.black);
 		frame.setResizable(false);
 		frame.add(this);
 		
@@ -126,13 +165,98 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		frame.setVisible(true);
 	}
 	
-	//Region: Reseting
-	private void resetGame()
+	//Region: GUI Stuff
+	private void guiSet()
 	{
-		
-		//Up,Right,Down,Left
+		gui.setAlignmentX(0);
+		gui.setAlignmentY(0);
+	}
+	//endRegion
+	
+	//Region: Reseting
+	
+	private void resetTriggers()
+	{
+		//This is when player collects all pellets
+		if(Tile.pelletCount <= 0)
+		{
+			System.out.println("All Clear");
+			if(!levelBeat)
+			{
+				GameObject.freeze();
+				//Play level complete chime
+				//Make all gameObjects stop in place
+				levelBeat = true;
+			}
+			
+			waitTimer++;
+			if(waitTimer > 400)
+			{
+				GameObject.setGrid(tileSet,false);//This sets all of the tiles
+				waitTimer = 0;
+				resetGame();
+			}
+		}
+		else if(resetTrig)//This is the one that resets game
+		{
+			GameObject.freeze();
+			///Wait a bit
+			waitTimer++;
+			if(waitTimer > 130)
+			{
+				waitTimer = 0;
+				resetTrig = false;
+				resetGame();
+			}
+		}
+		else if(deadTrig)//This is when player ran out of lives
+		{
+			//Display GameOver text
+			GameObject.freeze();
+			endGame();
+		}
 	}
 	
+	private void startUp()
+	{
+		if(startUpTimer >= 290)
+		{
+			startUp = false;
+			startUpTimer = -1;
+		}
+		
+		//Tells the get ready part to disappear after timer finished
+		direction = Direction.Up;
+		//Tell all gameobjects to stay still
+		startUpTimer++;
+	}
+	
+	public void resetGame()
+	{
+		startUp = true;
+		pacMan.reset();
+		direction = Direction.Up;
+		
+		blue.reset();
+		orange.reset();
+		red.reset();
+		pink.reset();
+		
+		startChime = new Music("PacStart.wav",false);
+		startChime.run();//Play Chime
+	}
+	
+	public void endGame()
+	{
+		waitTimer++;
+		if(waitTimer > 130)
+		{
+			waitTimer = 0;
+			GameObject.setGrid(tileSet,false);//This sets all of the tiles
+			GUI.reset();
+			startGame = false;
+		}
+	}
 	
 	//endRegion
 	
@@ -150,6 +274,13 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//Region: Input
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub	
+		//Start game
+		if(!startGame)
+		{
+			init(0,0);
+			startGame = true;
+			resetGame();
+		}
 		switch(arg0.getKeyCode()) {
 			
 			case 38: //up
@@ -164,6 +295,11 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 			case 39: //right
 				direction = Direction.Right;
 				break;
+				
+				//Debug
+			case KeyEvent.VK_1:
+				pacMan.Die();
+				break;	
 		}
 		
 		//Reset the game on button press when key is pressed and player is dead

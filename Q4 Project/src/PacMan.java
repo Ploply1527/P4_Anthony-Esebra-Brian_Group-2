@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -7,10 +6,13 @@ public class PacMan extends GameObject{
 
 	//Region: Player Data
 	private boolean isAlive = true;
-	private boolean startUp = false;
+	private boolean deadTrigger = true;
 	private final int speed = 3;
-	private int lives = 3;
+
 	Direction movement = Direction.Right;
+	//Sounds Effects
+	Music waka;
+	Music death;
 	//endRegion
 	
 	//Region: Pacman sprites
@@ -28,11 +30,17 @@ public class PacMan extends GameObject{
 	Image pacDown1 = getImage("PacDown1.png");
 	Image pacDown2 = getImage("PacDown2.png");
 	
-	Image pacClose3 = getImage("PacClose.png");
+	Image pacClose = getImage("PacClose.png");
 	//endRegion
 	
 	//Region: Dead sprites
-	Image pacDead;
+	Image pacDie1 = getImage("PacDie1.png");
+	Image pacDie2 = getImage("PacDie2.png");
+	Image pacDie3 = getImage("PacDie3.png");
+	Image pacDie4 = getImage("PacDie4.png");
+	Image pacDie5 = getImage("PacDie5.png");
+	Image pacDie6 = getImage("PacDie6.png");
+	Image pacDie7 = getImage("PacDie7.png");
 	//endregion
 	
 	//endregion
@@ -52,24 +60,22 @@ public class PacMan extends GameObject{
 		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(baseImage, tx, null);
-		/*
-		g.setColor(Color.blue);
-		g.fillRect(posX, posY, 4, 4);
-		*/
 	}
 	
 	public void reset()
 	{
 		super.reset();
+		isAlive = true;
+		deadTrigger = true;
 	}
-	
 	public void Die()
 	{
-		reset();
+		GUI.decrementLife();
+		isAlive = false;
 	}
+	
 	protected void animation() {
 		// TODO Auto-generated method stub
-		timerCount++;
 		if(isAlive)
 		{   //Default pacman animation
 			switch(timerCount/5)
@@ -109,7 +115,7 @@ public class PacMan extends GameObject{
 				}
 				break;
 			case 2:
-				baseImage = pacClose3;
+				baseImage = pacClose;
 				break;
 			default:
 				timerCount = 0;
@@ -118,15 +124,56 @@ public class PacMan extends GameObject{
 		}
 		else
 		{  //Pacman death animation
-			if(timerCount != 0) { timerCount = 0; }
+			if(timerCount != 0 && deadTrigger) 
+			{ 
+				timerCount = 0;
+				deadTrigger = false;
+			}
 			
 			switch(timerCount/4)
 			{
+				case 0:
+					baseImage = pacClose;
+					break;
+				case 1:
+					baseImage = pacDie1;
+					break;
+				case 2:
+					baseImage = pacDie2;
+					break;
+				case 3:
+					baseImage = pacDie3;
+					break;
+				case 4:
+					baseImage = pacDie4;
+					break;
+				case 5:
+					baseImage = pacDie5;
+					break;
+				case 6:
+					baseImage = pacDie6;
+					break;
+				case 7:
+					baseImage = pacDie7;
+					break;
 				default:
+					baseImage = null;//Make sprite diappear
+					if(GUI.gameOver())
+					{
+						GameBoard.deadTrig = true;//GameOver
+					}
+					else
+					{
+						GameBoard.resetTrig = true;
+					}
 					break;
 			}
 		}
 		
+		if(gameOver)
+		{
+			timerCount++;
+		}
 	}
 	
 	///This is the actual stuff for the movement
@@ -159,7 +206,7 @@ public class PacMan extends GameObject{
 		
 		CollisionCheck(vertical, dir, 4);//This is the void that does the collision checks
 		
-		if(!isAlive || startUp || collide)//Makes PacMan stay in place when dead
+		if(!isAlive || collide || gameOver)//Makes PacMan stay in place when dead
 		{
 			dir = 0;
 			
@@ -177,7 +224,7 @@ public class PacMan extends GameObject{
 			
 			//Sideways warp thing
 			if(posX < 1) { posX = 613;}
-			else if(posX > 614) { posX = 2;}
+			else if(posX > 613) { posX = 2;}
 			
 			gridX = Math.round(posX/22);
 		}
@@ -197,11 +244,11 @@ public class PacMan extends GameObject{
 		{
 		case 1:
 			board[gridY][gridX].pelletGet();
-			GUI.score += 10;
+			GUI.addScore(10);
 			break;
 		case 2:
 			board[gridY][gridX].pelletGet();
-			GUI.score += 50;
+			GUI.addScore(50);
 			Ghost.gVul = 4;
 			break;
 		default:
@@ -209,7 +256,7 @@ public class PacMan extends GameObject{
 		}
 	}
 	
-	
+	//Region: Debug
 	private void Debug(int dir)
 	{
 		System.out.print("Dir: " + dir + " ");
@@ -217,4 +264,5 @@ public class PacMan extends GameObject{
 		System.out.print(board[gridY][gridX].getTileType());
 		System.out.println(" Grid:[" + gridX + ", " + gridY + "]");
 	}
+	//endRegion
 }
