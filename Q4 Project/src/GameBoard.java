@@ -30,7 +30,12 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	//Region: Chimes
 	Music startChime;
+	Music doneChime;
 	//EndRegion
+	
+	//Region: Loud Mode
+	static boolean loud = false;
+	//endRegion
 	
 	//The board for pacMan
 	private Image boardImage = getImage("PacBoard.png");
@@ -83,7 +88,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	
 	//Region: GameObjects
 	//Region: Pac Man
-	static PacMan pacMan = new PacMan(14,22,"PacClose.png");
+	static PacMan pacMan = new PacMan(14,22,"PacClose.png", loud);
 	static Direction direction = Direction.Up;
 	
 	//Region: Ghosts
@@ -102,12 +107,14 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		super.paintComponent(g);// This is for refresh
 		
 		g.setColor(Color.black);
-		g.fillRect(0, 0, 616, 720);
+		g.fillRect(0, 0, 616, 700);
 		
 		Graphics2D g2 = (Graphics2D) g;
 		if(startGame)
 		{
-			g2.drawImage(boardImage, tx, null); 
+			g2.drawImage(boardImage, tx, null);
+			gui.paint(g);
+			
 			DrawTiles(g);
 			if(startUp)
 			{
@@ -143,14 +150,13 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		init(0,35);
 		CreateFrame(); //This creates the game frame
 		
-		GUI.reset();//Initialize pacman life
 		GameObject.setGrid(tileSet,true);//This sets all of the tiles
 	}
 	
 	void CreateFrame()
 	{
 		JFrame frame = new JFrame("Pac Man");
-		frame.setSize(616,720);
+		frame.setSize(616,700);
 		
 		frame.setResizable(false);
 		frame.add(this);
@@ -166,11 +172,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	//Region: GUI Stuff
-	private void guiSet()
-	{
-		gui.setAlignmentX(0);
-		gui.setAlignmentY(0);
-	}
 	//endRegion
 	
 	//Region: Reseting

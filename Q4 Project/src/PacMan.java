@@ -46,7 +46,7 @@ public class PacMan extends GameObject{
 	//endregion
 	
 	
-	public PacMan(int xGrid, int yGrid, String imageName) {
+	public PacMan(int xGrid, int yGrid, String imageName, boolean loud) {
 		super(xGrid, yGrid, imageName);
 		// TODO Auto-generated constructor stub
 		posY -= 12;

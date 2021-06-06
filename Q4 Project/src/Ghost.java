@@ -107,7 +107,7 @@ public class Ghost extends GameObject{
 		collide = false;
 		if(gameOver)//Stop when pacman is dead
 		{
-			
+			moveToPos(posX,posY);
 		}
 		else if(eaten)//Run to center
 		{
