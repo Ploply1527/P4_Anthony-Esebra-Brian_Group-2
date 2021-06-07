@@ -8,13 +8,19 @@ public class Ghost extends GameObject{
 	private boolean vulnerable = false;//This controls if the ghost can be eaten or not
 	private boolean eaten = false;//This sees if the ghost was eaten or not
 	
+	public static int gVul = 0;//This is to make all the ghosts vulnerable
+	private long vulTimer = 0;//This is how long the ghosts were vulnerable
+	private final int flashTime = 500;//This is how much later the ghosts will flash
+	private final int maxVulTime = 600; //This is show long the vulnerablity time will last
 	private int speed = 3;//This is a possible list of speeds the ghosts can have
-	
+	//Region: Images
 	private Image ghost1;
 	private Image ghost2;
 	private Image ghostVul1 = getImage("vul1.png");
 	private Image ghostVul2 = getImage("vul2.png");
 	private Image ghostEat = getImage("eyes.png");
+	//endRegion
+	
 	//endRegion
 	
 	public Ghost(int xGrid, int yGrid, String imageName, String g1) {
@@ -25,7 +31,7 @@ public class Ghost extends GameObject{
 		
 		vulnerable = false;//Makes the ghost not able to be eaten
 		//14
-		posY -= 9;
+		posY += 70;
 	}
 
 	//Region: AI
@@ -35,7 +41,10 @@ public class Ghost extends GameObject{
 	@Override
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub	
-		animation();
+		if(!gameOver) { animation(); }
+		
+		vulnerableCheck();
+		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.drawImage(baseImage, tx, null);
 	}
@@ -44,6 +53,7 @@ public class Ghost extends GameObject{
 	public void movCol(PacMan p)
 	{
 		movement(p);
+		moveToPos(0,50);
 		collision(p);
 	}
 	
@@ -59,7 +69,7 @@ public class Ghost extends GameObject{
 			switch(timerCount / 10)
 			{
 				case 0:
-					if(vulnerable)
+					if(vulnerable && !(flashTime < vulTimer && (vulTimer/7)%2 == 0))
 					{
 						baseImage = ghostVul1;
 					}
@@ -70,7 +80,7 @@ public class Ghost extends GameObject{
 				break;
 				
 				case 1:
-					if(vulnerable)
+					if(vulnerable && !(flashTime < vulTimer && (vulTimer/7)%2 == 0))
 					{
 						baseImage = ghostVul2;
 					}
@@ -91,40 +101,82 @@ public class Ghost extends GameObject{
 	protected void movement(PacMan p)
 	{
 		collide = false;
-		if(eaten)//Run to center
+		boolean vertical = false;
+		int dir = 1;
+
+		if(gameOver)//Stop when pacman is dead
 		{
-			returnToStart();
+			speed = 0;
+		}
+		else if(eaten)//Run to center
+		{
+			moveToPos(308,1);
 		}
 		else if(vulnerable)//Run away from pacman when vulnerable
 		{
 			
-		}
-		else //This is default movement
-		{
-			if(collide)
+			if(vertical)
 			{
-				posY += speed;
+				posY += speed * dir;
 				gridY = Math.round((posY)/22);
 			}
 			else
 			{
-				posX += speed;
+				posX += speed * dir;	
+				
+				//Sideways warp thing
+				if(posX < 1) { posX = 613;}
+				else if(posX > 614) { posX = 2;}
+				
+				gridX = Math.round(posX/22);
+			}
+			tx.setToTranslation(posX - 14, posY - 17);
+		}
+		else //This is default movement
+		{
+			//Move PacMan
+			if(vertical)
+			{
+				posY += speed * dir;
+				gridY = Math.round((posY)/22);
+			}
+			else
+			{
+				posX += speed * dir;	
+				
+				//Sideways warp thing
+				if(posX < 1) { posX = 613;}
+				else if(posX > 614) { posX = 2;}
+				
 				gridX = Math.round(posX/22);
 			}
 
-			tx.setToTranslation(posX - 10, posY - 17);
+			tx.setToTranslation(posX - 14, posY - 17);
 			
-			System.out.print(grid[gridX][gridY]);
-			System.out.println("Grid:[" + posX/22 + ", " + gridY + "]");
 		}
+		
 	}
 	//endRegion
 	
 	//This method should be called when the invincible pellet is used
-	public void turnVulnerable()
+	public void vulnerableCheck()
 	{
-		vulnerable = true;
+		if(gVul > 0 && !vulnerable)
+		{
+			gVul--;
+			vulTimer = 0;
+			vulnerable = true;
+		}
 		
+		if(vulnerable && vulTimer < 600)
+		{
+			vulTimer++;
+		}
+		else
+		{
+			vulTimer = 0;
+			vulnerable = false;
+		}
 		//Timer for invulnerabiliy time
 	}
 	
@@ -134,11 +186,13 @@ public class Ghost extends GameObject{
 		if((p.getX() <= posX - 7 && p.getX() >= posX - 13) &&
 		   (p.getY() <= posY - 14 && p.getY() >= posY - 20))
 		{
-			if(vulnerable)
+			if(vulnerable && !eaten)
 			{
+				GUI.score += 1000;//Increase points by 1000
 				eaten = true;
+				moveToPos(308,1);
 			}
-			else
+			else if(!vulnerable)
 			{
 				p.Die();
 			}
@@ -153,7 +207,7 @@ public class Ghost extends GameObject{
 		}
 		else
 		{
-			moveToX(x,true);
+			moveToY(y,true);
 		}
 	}
 	private void moveToX(int pX, boolean recBreak)//Helper method for movement
@@ -166,14 +220,18 @@ public class Ghost extends GameObject{
 		else
 		{
 			int temp = posX - pX;
-			int mov = temp / Math.abs(temp);
+			int dir = temp / Math.abs(temp);
 	
-			CollisionCheck(false, mov, 4);
+			CollisionCheck(false, dir, 4);
 			
-			if(!collide)
+			if(collide)
 			{
-				posX += (speed*mov);	
+				dir = 0; 
 			}
+			
+			posX += (speed*dir);	
+
+			gridX = Math.round(posX/22);
 		}
 	}
 	
@@ -194,19 +252,23 @@ public class Ghost extends GameObject{
 			if(!collide)
 			{
 				posY += (speed*mov);	
+				gridY = Math.round((posY)/22);
 			}
 		}
 	}
-	//This method should be called when pacman eats the ghost
-	private void returnToStart()
+	
+	//This is the void that moves away from the player
+	private void moveAway(PacMan p)
 	{
-		//if() if point is not reached
-		//moveToPos();
-		/*
-		else
-		{
-			eaten  = false;
+		if(posX != p.posX) {
+			speed *= -1;
 		}
-		 */
+	}
+	
+	@Override
+	public void reset() 
+	{
+		super.reset();
+		
 	}
 }
