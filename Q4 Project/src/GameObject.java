@@ -110,8 +110,8 @@ public abstract class GameObject {
 	//endRegion
 	
 	//Region: Getters and Setters
-	public int getX() {return gridX;}
-	public int getY() {return gridY;}
+	public int getX() {return posX;}
+	public int getY() {return posY;}
 	
 	public static void setGrid(int[][] g, boolean first) 
 	{

@@ -12,7 +12,7 @@ public class Ghost extends GameObject{
 	private long vulTimer = 0;//This is how long the ghosts were vulnerable
 	private final int flashTime = 500;//This is how much later the ghosts will flash
 	private final int maxVulTime = 600; //This is show long the vulnerablity time will last
-	private int speed = 3;//This is a possible list of speeds the ghosts can have
+	private final int speed = 0;//This is a possible list of speeds the ghosts can have
 	//Region: Images
 	private Image ghost1;
 	private Image ghost2;
@@ -52,7 +52,7 @@ public class Ghost extends GameObject{
 	
 	public void movCol(PacMan p)
 	{
-		//movement(p);
+		movement(p);
 		//moveToPos(0,50);
 		collision(p);
 	}
@@ -108,6 +108,7 @@ public class Ghost extends GameObject{
 		if(gameOver)//Stop when pacman is dead
 		{
 			moveToPos(posX,posY);
+			System.out.println("Don't Move");
 		}
 		else if(eaten)//Run to center
 		{
@@ -150,15 +151,15 @@ public class Ghost extends GameObject{
 	//This is the collision done with the pacMan stuff
 	private void collision(PacMan p)
 	{
-		if((p.getX() <= posX - 7 && p.getX() >= posX - 13) &&
-		   (p.getY() <= posY - 14 && p.getY() >= posY - 20))
+		if((p.getX() <= posX + 13 && p.getX() >= posX - 13) &&
+		   (p.getY() <= posY + 3  && p.getY() >= posY - 23))
 		{
 			if(vulnerable && !eaten)
 			{
 				GUI.addScore(1000);//Increase points by 1000
 				eaten = true;
 			}
-			else if(!vulnerable)
+			else if(!vulnerable && p.isAlive)
 			{
 				p.Die();
 			}
@@ -185,38 +186,55 @@ public class Ghost extends GameObject{
 		}
 		else
 		{
-			int temp = posX - pX;
-			int dir = temp / Math.abs(temp);
+			int dir = 0;
+			if(posX != pX)
+			{
+				int temp = posX - pX;
+				try 
+				{
+					dir = temp / Math.abs(temp);
+				}
+				catch(ArithmeticException e)
+				{
+					temp = 1;
+				}
+			}
 	
 			CollisionCheck(false, dir, 4);
 			
-			if(collide)
+			if(!collide)
 			{
-				dir = 0; 
-			}
-			
-			posX += (speed*dir);	
-
-			gridX = Math.round(posX/22);
+				posX -= speed*dir;	
+				gridX = Math.round(posX/22);
+			}	
 		}
 	}
 	private void moveToY(int pY, boolean recBreak)
 	{
-		if(posY == pY && recBreak)
+		if((posY - 3 <= pY && posY + 3 >= pY)&& recBreak)
 		{
 			moveToX(posX, false);
 		}
 		else
 		{
-			//Check for colcheck5 when moving up but not down
-			int temp = posY - pY;
-			int mov = temp / Math.abs(temp);
-			
-			CollisionCheck(false, mov, (9 - mov)/2);
+			int dir = 0;
+			if(posY != pY)
+			{
+				int temp = posX - pY;
+				try 
+				{
+					dir = temp / Math.abs(temp);
+				}
+				catch(ArithmeticException e)
+				{
+					temp = 1;
+				}
+			}
+			CollisionCheck(true, dir, 4);
 			
 			if(!collide)
 			{
-				posY += (speed*mov);	
+				posY -= (speed*dir);	
 				gridY = Math.round((posY)/22);
 			}
 		}

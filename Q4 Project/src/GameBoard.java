@@ -22,6 +22,12 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	private Image titleScreen = getImage("Title.png");
 	private boolean startGame = false;
 	private boolean startUp = true;
+	private Image titleText = getImage("PressButton.png");
+	
+	//Other text
+	private Image gameOver = getImage("GameOver.png");
+	private Image ready = getImage("Ready.png");
+	//endRegion
 	
 	//Region:Timers
 	private int startUpTimer = 0;
@@ -31,7 +37,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//Region: Chimes
 	Music startChime;
 	Music doneChime;
-	//EndRegion
+	//endRegion
 	
 	//Region: Loud Mode
 	static boolean loud = false;
@@ -49,6 +55,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//endRegion
 	
 	private final int a = 0;
+	int i = 3;
 	//The move ability of the board
 	//PacMan board is 28 x 31
 	// 0 = false, 1 = true/has pellet, 2 = true/big pellet, 3 = true/no Pellet, 4 = ghost only
@@ -66,11 +73,11 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	{a,1,1,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,a,a,1,1,1,1,1,1,a},//8
 	{a,a,a,a,a,a,1,a,a,a,a,a,1,a,a,1,a,a,a,a,a,1,a,a,a,a,a,a},//9
 	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//10
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//11
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,4,4,a,a,a,3,a,a,1,a,a,a,a,a,a},//12
-	{3,3,3,3,3,3,1,3,3,3,a,4,4,4,4,4,4,a,3,3,3,1,3,3,3,3,3,3},//13
-	{a,a,a,a,a,a,1,a,a,3,a,4,4,4,4,4,4,a,3,a,a,1,a,a,a,a,a,a},//14
-	{a,a,a,a,a,a,1,a,a,3,a,a,a,a,a,a,a,a,3,a,a,1,a,a,a,a,a,a},//15
+	{a,a,a,a,a,a,1,a,a,3,i,i,i,i,i,i,i,i,3,a,a,1,a,a,a,a,a,a},//11
+	{a,a,a,a,a,a,1,a,a,3,i,i,i,i,i,i,i,i,3,a,a,1,a,a,a,a,a,a},//12
+	{3,3,3,3,3,3,1,3,3,3,i,i,i,i,i,i,i,i,3,3,3,1,3,3,3,3,3,3},//13
+	{a,a,a,a,a,a,1,a,a,3,i,i,i,i,i,i,i,i,3,a,a,1,a,a,a,a,a,a},//14
+	{a,a,a,a,a,a,1,a,a,3,i,i,i,i,i,i,i,i,3,a,a,1,a,a,a,a,a,a},//15
 	{a,a,a,a,a,a,1,a,a,3,3,3,3,3,3,3,3,3,3,a,a,1,a,a,a,a,a,a},//16
 	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//17
 	{a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a,a,a,1,a,a,1,a,a,a,a,a,a},//18
@@ -119,6 +126,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 			if(startUp)
 			{
 				startUp();	
+				g2.drawImage(ready,260, 300, null);
 			}
 			else
 			{
@@ -135,10 +143,15 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 				red.paint(g);
 				pink.paint(g);
 			}
+			if(deadTrig)
+			{
+				g2.drawImage(gameOver,260, 300, null);
+			}
 		}
 		else
 		{
 			g2.drawImage(titleScreen, tx, null);  //TitleScreen	
+			g2.drawImage(titleText,150, 400, null);//The other text
 		}
 		
 		resetTriggers();
@@ -184,9 +197,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 			System.out.println("All Clear");
 			if(!levelBeat)
 			{
+				//Make all gameObjects stop in place
 				GameObject.freeze();
 				//Play level complete chime
-				//Make all gameObjects stop in place
 				levelBeat = true;
 			}
 			

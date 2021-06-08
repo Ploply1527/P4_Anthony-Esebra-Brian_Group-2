@@ -5,13 +5,14 @@ import java.awt.Image;
 public class PacMan extends GameObject{
 
 	//Region: Player Data
-	private boolean isAlive = true;
+	public boolean isAlive = true;
 	private boolean deadTrigger = true;
 	private final int speed = 3;
 
 	Direction movement = Direction.Right;
 	//Sounds Effects
-	Music waka;
+	private boolean wak = true;
+	Music waka = new Music("Waka.wav", true);;
 	Music death;
 	//endRegion
 	
@@ -71,6 +72,8 @@ public class PacMan extends GameObject{
 	public void Die()
 	{
 		GUI.decrementLife();
+		death = new Music("gameOver.wav", false);
+		death.play();
 		isAlive = false;
 	}
 	
@@ -78,9 +81,15 @@ public class PacMan extends GameObject{
 		// TODO Auto-generated method stub
 		if(isAlive)
 		{   //Default pacman animation
-			switch(timerCount/5)
+			switch(timerCount/7)
 			{
 			case 0:
+				if(wak)
+				{
+					waka = new Music("Waka.wav", true);
+					waka.play();
+					wak = false;
+				}
 				switch(movement)
 				{
 					case Up:
@@ -119,6 +128,7 @@ public class PacMan extends GameObject{
 				break;
 			default:
 				timerCount = 0;
+				wak = true;
 				break;
 			}
 		}
@@ -259,9 +269,6 @@ public class PacMan extends GameObject{
 	//Region: Debug
 	private void Debug(int dir)
 	{
-		System.out.print("Dir: " + dir + " ");
-
-		System.out.print(board[gridY][gridX].getTileType());
 		System.out.println(" Grid:[" + gridX + ", " + gridY + "]");
 	}
 	//endRegion
