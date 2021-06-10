@@ -24,7 +24,7 @@ public class Tile {
 	public void paint(Graphics g)
 	{
 		drawPellet(g);
-		debug(g);
+		//debug(g);
 	}
 	///This will be used for collision detection
 	public int getTileType()

@@ -12,7 +12,8 @@ public class Ghost extends GameObject{
 	private long vulTimer = 0;//This is how long the ghosts were vulnerable
 	private final int flashTime = 500;//This is how much later the ghosts will flash
 	private final int maxVulTime = 600; //This is show long the vulnerablity time will last
-	private final int speed = 0;//This is a possible list of speeds the ghosts can have
+	private int speed = 3;//This is a possible list of speeds the ghosts can have
+	
 	//Region: Images
 	private Image ghost1;
 	private Image ghost2;
@@ -53,7 +54,7 @@ public class Ghost extends GameObject{
 	public void movCol(PacMan p)
 	{
 		movement(p);
-		//moveToPos(0,50);
+		moveToPos(0,50);
 		collision(p);
 	}
 	
@@ -95,20 +96,18 @@ public class Ghost extends GameObject{
 					break;
 			}
 		}
-		
-		if(!gameOver)
-		{
-			timerCount++;
-		}
+		timerCount++;
 	}
 	
 	protected void movement(PacMan p)
 	{
 		collide = false;
+		boolean vertical = false;
+		int dir = 1;
+
 		if(gameOver)//Stop when pacman is dead
 		{
-			moveToPos(posX,posY);
-			System.out.println("Don't Move");
+			speed = 0;
 		}
 		else if(eaten)//Run to center
 		{
@@ -117,12 +116,46 @@ public class Ghost extends GameObject{
 		else if(vulnerable)//Run away from pacman when vulnerable
 		{
 			
+			if(vertical)
+			{
+				posY += speed * dir;
+				gridY = Math.round((posY)/22);
+			}
+			else
+			{
+				posX += speed * dir;	
+				
+				//Sideways warp thing
+				if(posX < 1) { posX = 613;}
+				else if(posX > 614) { posX = 2;}
+				
+				gridX = Math.round(posX/22);
+			}
+			tx.setToTranslation(posX - 14, posY - 17);
 		}
 		else //This is default movement
 		{
-			moveToPos(p.getX(), p.getY());//Move to PacMan Pos
+			//Move PacMan
+			if(vertical)
+			{
+				posY += speed * dir;
+				gridY = Math.round((posY)/22);
+			}
+			else
+			{
+				posX += speed * dir;	
+				
+				//Sideways warp thing
+				if(posX < 1) { posX = 613;}
+				else if(posX > 614) { posX = 2;}
+				
+				gridX = Math.round(posX/22);
+			}
+
+			tx.setToTranslation(posX - 14, posY - 17);
+			
 		}
-		tx.setToTranslation(posX - 14, posY - 17);
+		
 	}
 	//endRegion
 	
@@ -152,7 +185,7 @@ public class Ghost extends GameObject{
 	private void collision(PacMan p)
 	{
 		if((p.getX() <= posX + 13 && p.getX() >= posX - 13) &&
-		   (p.getY() <= posY + 3  && p.getY() >= posY - 23))
+		(p.getY() <= posY + 3  && p.getY() >= posY - 23))
 		{
 			if(vulnerable && !eaten)
 			{
@@ -186,70 +219,56 @@ public class Ghost extends GameObject{
 		}
 		else
 		{
-			int dir = 0;
-			if(posX != pX)
-			{
-				int temp = posX - pX;
-				try 
-				{
-					dir = temp / Math.abs(temp);
-				}
-				catch(ArithmeticException e)
-				{
-					temp = 1;
-				}
-			}
+			int temp = posX - pX;
+			int dir = temp / Math.abs(temp);
 	
 			CollisionCheck(false, dir, 4);
 			
-			if(!collide)
+			if(collide)
 			{
-				posX -= speed*dir;	
-				gridX = Math.round(posX/22);
-			}	
+				dir = 0; 
+			}
+			
+			posX += (speed*dir);	
+
+			gridX = Math.round(posX/22);
 		}
 	}
+	
 	private void moveToY(int pY, boolean recBreak)
 	{
-		if((posY - 3 <= pY && posY + 3 >= pY)&& recBreak)
+		if(posY == pY && recBreak)
 		{
 			moveToX(posX, false);
 		}
 		else
 		{
-			int dir = 0;
-			if(posY != pY)
-			{
-				int temp = posX - pY;
-				try 
-				{
-					dir = temp / Math.abs(temp);
-				}
-				catch(ArithmeticException e)
-				{
-					temp = 1;
-				}
-			}
-			CollisionCheck(true, dir, 4);
+			//Check for colcheck5 when moving up but not down
+			int temp = posY - pY;
+			int mov = temp / Math.abs(temp);
+			
+			CollisionCheck(false, mov, (9 - mov)/2);
 			
 			if(!collide)
 			{
-				posY -= (speed*dir);	
+				posY += (speed*mov);	
 				gridY = Math.round((posY)/22);
 			}
 		}
 	}
 	
 	//This is the void that moves away from the player
-	private void moveAway()
+	private void moveAway(PacMan p)
 	{
-		
+		if(posX != p.posX) {
+			speed *= -1;
+		}
 	}
 	
 	@Override
 	public void reset() 
 	{
 		super.reset();
-		
+		vulnerable = false;
 	}
 }

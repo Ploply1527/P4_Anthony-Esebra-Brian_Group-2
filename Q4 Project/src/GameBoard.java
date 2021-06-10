@@ -27,6 +27,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//Other text
 	private Image gameOver = getImage("GameOver.png");
 	private Image ready = getImage("Ready.png");
+	private Image dev = getImage("DevMode.png");
 	//endRegion
 	
 	//Region:Timers
@@ -152,6 +153,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		{
 			g2.drawImage(titleScreen, tx, null);  //TitleScreen	
 			g2.drawImage(titleText,150, 400, null);//The other text
+			g2.drawImage(dev, 150,500, null);
 		}
 		
 		resetTriggers();
@@ -200,14 +202,25 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 				//Make all gameObjects stop in place
 				GameObject.freeze();
 				//Play level complete chime
+				if(loud)
+				{
+					doneChime = new Music("doneScrem.wav",false);
+				}
+				else
+				{
+					doneChime = new Music("LevelDone.wav", false);
+				}
+				doneChime.play();
 				levelBeat = true;
 			}
 			
-			waitTimer++;
-			if(waitTimer > 400)
+			waitTimer++; 
+			if(waitTimer > 250)
 			{
 				GameObject.setGrid(tileSet,false);//This sets all of the tiles
 				waitTimer = 0;
+				doneChime.stop();
+				levelBeat = false;
 				resetGame();
 			}
 		}
@@ -256,7 +269,14 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 		red.reset();
 		pink.reset();
 		
-		startChime = new Music("PacStart.wav",false);
+		if(loud)
+		{
+			startChime = new Music("startScrem.wav", false);
+		}
+		else
+		{
+			startChime = new Music("PacStart.wav",false);
+		}
 		startChime.run();//Play Chime
 	}
 	
@@ -268,6 +288,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 			waitTimer = 0;
 			GameObject.setGrid(tileSet,false);//This sets all of the tiles
 			GUI.reset();
+			loud = false;
 			startGame = false;
 		}
 	}
@@ -288,13 +309,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 	//Region: Input
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub	
-		//Start game
-		if(!startGame)
-		{
-			init(0,0);
-			startGame = true;
-			resetGame();
-		}
 		switch(arg0.getKeyCode()) {
 			
 			case 38: //up
@@ -309,13 +323,22 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener{
 			case 39: //right
 				direction = Direction.Right;
 				break;
-				
+			case KeyEvent.VK_SPACE:
+				if(!loud && !startGame)
+				{
+					loud = true;
+				}
 				//Debug
-			case KeyEvent.VK_1:
-				pacMan.Die();
-				break;	
+			break;
 		}
 		
+		if(!startGame)
+		{
+			init(0,0);
+			startGame = true;
+			pacMan.pacLoud(loud);
+			resetGame();
+		}
 		//Reset the game on button press when key is pressed and player is dead
 		
 	}

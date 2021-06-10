@@ -8,9 +8,10 @@ public class PacMan extends GameObject{
 	public boolean isAlive = true;
 	private boolean deadTrigger = true;
 	private final int speed = 3;
-
+	
 	Direction movement = Direction.Right;
 	//Sounds Effects
+	private boolean loud = false;
 	private boolean wak = true;
 	Music waka = new Music("Waka.wav", true);;
 	Music death;
@@ -80,13 +81,21 @@ public class PacMan extends GameObject{
 	protected void animation() {
 		// TODO Auto-generated method stub
 		if(isAlive)
+			
 		{   //Default pacman animation
-			switch(timerCount/7)
+			switch(timerCount/9)
 			{
 			case 0:
 				if(wak)
 				{
-					waka = new Music("Waka.wav", true);
+					if(loud)
+					{
+						waka = new Music("wakScrem.wav",false);
+					}
+					else
+					{
+						waka = new Music("Waka.wav", false);
+					}
 					waka.play();
 					wak = false;
 				}
@@ -129,6 +138,7 @@ public class PacMan extends GameObject{
 			default:
 				timerCount = 0;
 				wak = true;
+				waka.stop();
 				break;
 			}
 		}
@@ -266,6 +276,10 @@ public class PacMan extends GameObject{
 		}
 	}
 	
+	public void pacLoud(boolean l)
+	{
+		loud = l;
+	}
 	//Region: Debug
 	private void Debug(int dir)
 	{
